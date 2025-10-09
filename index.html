@@ -5,7 +5,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>✨ Nirmal's Portfolio</title>
-  <link href="https://fonts.googleapis.com/css2?family=Orbitron&family=Pacifico&family=Montserrat&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Indie+Flower&display=swap" rel="stylesheet">
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
   <style>
     :root {
@@ -28,6 +28,7 @@
     }
 
     html, body {
+      font-family: 'Indie Flower', cursive;
       background-color: var(--bg-color);
       color: var(--text-color);
       padding: 20px;
@@ -46,12 +47,44 @@
       z-index: 0;
     }
 
-    header {
-      text-align: center;
-      margin-top: 20px;
+    header h1 {
       position: relative;
-      z-index: 1;
+      font-family: 'Indie Flower', cursive !important; /* force font */
+      font-weight: normal;
+      font-size: 2em;
+      background: linear-gradient(270deg, red, pink, white, red, blue, green, maroon, yellow, maroon);
+      background-size: 400% 400%;
+      background-clip: text;
+      -webkit-background-clip: text; /* WebKit browsers */
+      /* visible fallback for browsers without background-clip:text */
+      color: var(--text-color);
+      animation: colorFlow 6s ease infinite;
     }
+
+    /* Only force transparent text (so gradient shows) in browsers that support -webkit-background-clip */
+    @supports (-webkit-background-clip: text) {
+      header h1 {
+        color: transparent;
+        -webkit-text-fill-color: transparent;
+      }
+     @keyframes colorFlow {
+                0% {
+                background-position: 0% 50%;
+                }
+                25% {
+                background-position: 50% 0%;
+                }
+                50% {
+                background-position: 100% 50%;
+                }
+                75% {
+                background-position: 50% 100%;
+                }
+                100% {
+                background-position: 0% 50%;
+                }
+    }
+
 
     .profile-pic {
       width: 160px;
@@ -82,7 +115,6 @@
       from { transform: rotate(0deg); }
       to { transform: rotate(360deg); }
     }
-
     .about {
       text-align: center;
       margin: 30px 0 10px;
@@ -207,7 +239,8 @@
 
   <header>
     <div class="profile-pic"></div>
-    <h1>✨ Nirmal Kumar ✨</h1>
+    <h1 style="font-family: 'Indie Flower', cursive;">
+<b>✨# ℕι𝚛𝚖αℓ__𝙺𝚛...*~>✨</b></h1>
   </header>
 
   <div class="about"><i>
@@ -224,15 +257,15 @@
   <section class="skills">
     <h2> <u><b>Skills</b></u></h2>
     <ul>
-      <li>Mastering Kali Linux 𓆰𓆪</li>
-      <li>Completed ISc from School Of Excellence,Godda 🎓</li>
-      <li>Mastering Python </></li>
-      <li>Mastering SQL ⛁</li>
-      <li>Working on Databases 🖧</li>
-      <li>Application creation by integrating pages ⚙️</li>
-      <li>Soft Skills: Communication, Collaboration, Critical Thinking 🧩</li>
-      <li>Chess Lover 👑</li>
-      <li>Travel & Exploration 🌐</li>
+      <li>* Mastering Kali Linux 𓆰𓆪</li>
+      <li>* Completed ISc from School Of Excellence,Godda 🎓</li>
+      <li>* Mastering Python </></li>
+      <li>* Mastering SQL ⛁</li>
+      <li>* Working on Databases 🖧</li>
+      <li>* Application creation by integrating pages ⚙️</li>
+      <li>* Soft Skills: Communication, Collaboration, Critical Thinking 🧩</li>
+      <li>* Chess Lover 👑</li>
+      <li>* Travel & Exploration 🌐</li>
     </ul>
   </section>
 
