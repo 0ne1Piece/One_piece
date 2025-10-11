@@ -24,6 +24,14 @@
       --card-hover: #e8e8e8;
     }
 
+    [data-theme="light"] nav {
+      background: rgba(240, 240, 240, 0.95);
+    }
+
+    [data-theme="light"] .nav-links {
+      background: rgba(240, 240, 240, 0.98);
+    }
+
     * {
       margin: 0;
       padding: 0;
@@ -149,27 +157,36 @@
     }
 
     .profile-pic {
-      width: 160px;
-      height: 160px;
+      width: 180px;
+      height: 180px;
       margin: 0 auto;
       border-radius: 50%;
       background-image: url('https://github.com/the-invincible-genius/its_invincible/blob/main/IMG_20250408_184307~2.jpg?raw=true');
       background-size: cover;
       background-position: center;
       position: relative;
+      animation: float 3s ease-in-out infinite;
+      z-index: 100;
+      box-shadow: 0 0 40px rgba(0, 255, 247, 0.6);
+    }
+
+    @keyframes float {
+      0%, 100% { transform: translateY(0px); }
+      50% { transform: translateY(-20px); }
     }
 
     .profile-pic::before {
       content: '';
       position: absolute;
-      top: -5px;
-      left: -5px;
-      right: -5px;
-      bottom: -5px;
+      top: -8px;
+      left: -8px;
+      right: -8px;
+      bottom: -8px;
       border-radius: 50%;
-      background: linear-gradient(270deg, red, pink, blue, green, yellow, maroon);
-      animation: spin 5s linear infinite;
-      box-shadow: 0 0 10px #fff5, 0 0 25px #0ff5;
+      background: linear-gradient(270deg, red, pink, white, red, blue, green, maroon, yellow, maroon);
+      background-size: 400% 400%;
+      animation: colorFlow 6s ease infinite;
+      box-shadow: 0 0 30px rgba(0, 255, 247, 0.5);
       z-index: -1;
     }
 
@@ -188,7 +205,7 @@
       background-clip: text;
       -webkit-background-clip: text;
       color: var(--text-color);
-      animation: colorFlow 10s ease infinite;
+      animation: colorFlow 6s ease infinite;
     }
 
     @supports (-webkit-background-clip: text) {
@@ -209,6 +226,54 @@
       font-size: 1.1rem;
       color: var(--accent);
       margin: 10px 0;
+    }
+
+    /* Typewriter Effect */
+    .typewriter {
+      font-size: 1.2rem;
+      color: var(--accent);
+      margin: 20px auto;
+      min-height: 40px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 0 20px;
+    }
+
+    .typewriter::before {
+      content: 'Cybersecurity Enthusiast | Python Developer | Database Engineer';
+      white-space: nowrap;
+      overflow: hidden;
+      animation: revealText 3s cubic-bezier(0.77, 0, 0.175, 1) forwards, shimmer 3s ease-in-out infinite;
+      background: linear-gradient(90deg, var(--accent) 0%, #ffffff 50%, var(--accent) 100%);
+      background-size: 200% 100%;
+      background-clip: text;
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      text-align: center;
+    }
+
+    @keyframes revealText {
+      0% {
+        max-width: 0;
+        opacity: 0;
+      }
+      50% {
+        opacity: 1;
+      }
+      100% {
+        max-width: 100%;
+        opacity: 1;
+      }
+    }
+
+    @keyframes shimmer {
+      0% {
+        background-position: -200% 0;
+      }
+      100% {
+        background-position: 200% 0;
+      }
     }
 
     .about {
@@ -267,7 +332,7 @@
       width: 100%;
       height: 100%;
       opacity: 0;
-      animation: slideShow 12s infinite;
+      animation: slideShow 28s infinite;
       z-index: 10;
     }
 
@@ -281,6 +346,18 @@
 
     .gallery-item:nth-child(3) {
       animation-delay: 8s;
+    }
+    .gallery-item:nth-child(4) {
+      animation-delay: 12s;
+    }
+    .gallery-item:nth-child(5) {
+      animation-delay: 16s;
+    }
+    .gallery-item:nth-child(6) {
+      animation-delay: 20s;
+    }
+    .gallery-item:nth-child(7) {
+      animation-delay: 24s;
     }
 
     @keyframes slideShow {
@@ -542,10 +619,43 @@
     }
 
     /* Footer */
+    .signature {
+      text-align: center;
+      font-size: 1.8rem;
+      margin: 60px 0 40px;
+      font-family: 'Indie Flower', cursive;
+      letter-spacing: 2px;
+      background: linear-gradient(270deg, red, pink, white, red, blue, green, maroon, yellow, maroon);
+      background-size: 200% auto;
+      background-clip: text;
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      animation: gradientFlow 4s linear infinite, glow 2s ease-in-out infinite alternate;
+      filter: drop-shadow(0 0 10px rgba(0, 255, 247, 0.5));
+    }
+
+    @keyframes gradientFlow {
+      0% {
+        background-position: 0% center;
+      }
+      100% {
+        background-position: 200% center;
+      }
+    }
+
+    @keyframes glow {
+      from {
+        filter: drop-shadow(0 0 10px rgba(0, 255, 247, 0.5));
+      }
+      to {
+        filter: drop-shadow(0 0 20px rgba(120, 115, 245, 0.8));
+      }
+    }
+
     footer {
       text-align: center;
       padding: 40px 20px;
-      margin-top: 80px;
+      margin-top: 20px;
       border-top: 1px solid rgba(0, 255, 247, 0.2);
     }
 
@@ -592,6 +702,16 @@
       .gallery {
         max-width: 300px;
         height: 300px;
+      }
+
+      .typewriter {
+        font-size: 1rem;
+      }
+
+      .typewriter::before {
+        white-space: normal;
+        word-wrap: break-word;
+        line-height: 1.6;
       }
 
       .skills-grid, .projects-grid {
@@ -661,7 +781,7 @@
     <header id="home">
       <div class="profile-pic"></div>
       <h1><b>✨# ℕι𝚛𝚖αℓ__𝙺𝚛...*~>✨</b></h1>
-      <p class="subtitle">Cybersecurity Enthusiast | Python Developer | Database Engineer</p>
+      <div class="typewriter"></div>
     </header>
 
     <!-- About Section -->
@@ -676,13 +796,22 @@
       <h2 class="section-title">Gallery</h2>
       <div class="gallery">
         <div class="gallery-item">
+          <img src="https://github.com/the-invincible-genius/its_invincible/blob/main/git_screen.png?raw=true" alt="Nirmal">
+        </div>
+        <div class="gallery-item">
+        <img src="https://github.com/the-invincible-genius/its_invincible/blob/main/SQL%20Intermediate_certificate.jpg?raw=true" alt="Nirmal">
+        </div>
+        <div class="gallery-item">
           <img src="https://github.com/the-invincible-genius/its_invincible/blob/main/system_photo.jpeg?raw=true" alt="Nirmal">
+       </div> 
+        <div class="gallery-item">
+          <img src="https://github.com/the-invincible-genius/its_invincible/blob/main/IMG_20250620_075322.jpg?raw=true" alt="Nirmal">
         </div>
         <div class="gallery-item">
           <img src="https://github.com/the-invincible-genius/its_invincible/blob/main/Kali-Linux-Terminal-7.jpg?raw=true" alt="Nirmal">
         </div>
         <div class="gallery-item">
-          <img src="https://github.com/the-invincible-genius/its_invincible/blob/main/IMG_20250620_075322.jpg?raw=true" alt="Nirmal">
+          <img src="https://github.com/the-invincible-genius/its_invincible/blob/main/Python%20Developer_certificate.jpg?raw=true" alt="Nirmal">
         </div>
       </div>
     </section>
@@ -870,6 +999,11 @@
         </div>
       </div>
     </section>
+  </div>
+
+  <!-- Signature -->
+  <div class="signature">
+    °⨳°⊹٭ निर्मल ٭⊹°⨳°
   </div>
 
   <!-- Footer -->
