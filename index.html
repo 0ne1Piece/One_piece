@@ -175,18 +175,28 @@
       50% { transform: translateY(-20px); }
     }
 
+    .profile-pic {
+      width: 160px;
+      height: 160px;
+      margin: 0 auto;
+      border-radius: 50%;
+      background-image: url('https://github.com/the-invincible-genius/its_invincible/blob/main/IMG_20250408_184307~2.jpg?raw=true');
+      background-size: cover;
+      background-position: center;
+      position: relative;
+    }
+
     .profile-pic::before {
       content: '';
       position: absolute;
-      top: -8px;
-      left: -8px;
-      right: -8px;
-      bottom: -8px;
+      top: -5px;
+      left: -5px;
+      right: -5px;
+      bottom: -5px;
       border-radius: 50%;
-      background: linear-gradient(270deg, red, pink, white, red, blue, green, maroon, yellow, maroon);
-      background-size: 400% 400%;
-      animation: colorFlow 6s ease infinite;
-      box-shadow: 0 0 30px rgba(0, 255, 247, 0.5);
+      background: linear-gradient(from 270deg, red, pink, white, red, blue, green, maroon);
+      animation: spin 5s linear infinite;
+      box-shadow: 0 0 10px #fff5, 0 0 25px #0ff5;
       z-index: -1;
     }
 
