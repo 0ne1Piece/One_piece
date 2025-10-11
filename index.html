@@ -5,37 +5,43 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>✨ Nirmal's Portfolio</title>
-  <link href="https://fonts.googleapis.com/css2?family=Indie+Flower&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Indie+Flower&family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
   <style>
     :root {
       --bg-color: #0e0e0e;
       --text-color: white;
       --accent: #00fff7;
+      --card-bg: #1a1a1a;
+      --card-hover: #252525;
     }
 
     [data-theme="light"] {
       --bg-color: #f0f0f0;
       --text-color: #111;
       --accent: #0077ff;
+      --card-bg: #ffffff;
+      --card-hover: #e8e8e8;
     }
 
     * {
       margin: 0;
       padding: 0;
       box-sizing: border-box;
-      font-family: 'Montserrat', sans-serif;
     }
 
-    html, body {
-      font-family: 'Indie Flower', cursive;
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      font-family: 'Poppins', sans-serif;
       background-color: var(--bg-color);
       color: var(--text-color);
-      padding: 20px;
       min-height: 100vh;
       transition: background 0.4s, color 0.4s;
       position: relative;
-      z-index: 1;
+      overflow-x: hidden;
     }
 
     #particles-js {
@@ -47,44 +53,100 @@
       z-index: 0;
     }
 
-    header h1 {
+    .container {
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 20px;
       position: relative;
-      font-family: 'Indie Flower', cursive !important; /* force font */
-      font-weight: normal;
-      font-size: 1.7em;
-      background: linear-gradient(270deg, red, pink, white, red, blue, green, maroon, yellow, maroon);
-      background-size: 400% 400%;
-      background-clip: text;
-      -webkit-background-clip: text; /* WebKit browsers */
-      /* visible fallback for browsers without background-clip:text */
+      z-index: 1;
+    }
+
+    /* Navigation */
+    nav {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      background: rgba(14, 14, 14, 0.95);
+      backdrop-filter: blur(10px);
+      padding: 15px 0;
+      z-index: 1000;
+      box-shadow: 0 2px 20px rgba(0, 255, 247, 0.1);
+    }
+
+    nav .container {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 0 20px;
+    }
+
+    .nav-logo {
+      font-family: 'Indie Flower', cursive;
+      font-size: 1.5rem;
+      font-weight: bold;
+      color: var(--accent);
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 30px;
+      list-style: none;
+    }
+
+    .nav-links a {
       color: var(--text-color);
-      animation: colorFlow 6s ease infinite;
+      text-decoration: none;
+      font-size: 0.95rem;
+      transition: color 0.3s;
+      position: relative;
     }
 
-    /* Only force transparent text (so gradient shows) in browsers that support -webkit-background-clip */
-    @supports (-webkit-background-clip: text) {
-      header h1 {
-        color: transparent;
-        -webkit-text-fill-color: transparent;
-      }
-     @keyframes colorFlow {
-                0% {
-                background-position: 0% 50%;
-                }
-                25% {
-                background-position: 50% 0%;
-                }
-                50% {
-                background-position: 100% 50%;
-                }
-                75% {
-                background-position: 50% 100%;
-                }
-                100% {
-                background-position: 0% 50%;
-                }
+    .nav-links a::after {
+      content: '';
+      position: absolute;
+      bottom: -5px;
+      left: 0;
+      width: 0;
+      height: 2px;
+      background: var(--accent);
+      transition: width 0.3s;
     }
 
+    .nav-links a:hover::after {
+      width: 100%;
+    }
+
+    .theme-toggle {
+      background: var(--accent);
+      color: #000;
+      border: none;
+      padding: 8px 15px;
+      border-radius: 20px;
+      cursor: pointer;
+      font-size: 0.9rem;
+      transition: transform 0.3s;
+    }
+
+    .theme-toggle:hover {
+      transform: scale(1.05);
+    }
+
+    .mobile-menu-btn {
+      display: none;
+      background: none;
+      border: none;
+      color: var(--text-color);
+      font-size: 1.5rem;
+      cursor: pointer;
+    }
+
+    /* Header Section */
+    header {
+      margin-top: 100px;
+      text-align: center;
+      padding: 40px 0;
+    }
 
     .profile-pic {
       width: 160px;
@@ -105,7 +167,7 @@
       right: -5px;
       bottom: -5px;
       border-radius: 50%;
-      background: conic-gradient(from 0deg,blue,green, yellow, purple, maroon);
+      background: linear-gradient(270deg, red, pink, blue, green, yellow, maroon);
       animation: spin 5s linear infinite;
       box-shadow: 0 0 10px #fff5, 0 0 25px #0ff5;
       z-index: -1;
@@ -115,76 +177,317 @@
       from { transform: rotate(0deg); }
       to { transform: rotate(360deg); }
     }
+
+    header h1 {
+      font-family: 'Indie Flower', cursive;
+      font-weight: normal;
+      font-size: 2.5rem;
+      margin: 20px 0 10px;
+      background: linear-gradient(270deg, red, pink, white, red, blue, green, maroon, yellow, maroon);
+      background-size: 400% 400%;
+      background-clip: text;
+      -webkit-background-clip: text;
+      color: var(--text-color);
+      animation: colorFlow 10s ease infinite;
+    }
+
+    @supports (-webkit-background-clip: text) {
+      header h1 {
+        color: transparent;
+        -webkit-text-fill-color: transparent;
+      }
+    }
+
+    @keyframes colorFlow {
+      0%, 100% { background-position: 0% 50%; }
+      25% { background-position: 50% 0%; }
+      50% { background-position: 100% 50%; }
+      75% { background-position: 50% 100%; }
+    }
+
+    .subtitle {
+      font-size: 1.1rem;
+      color: var(--accent);
+      margin: 10px 0;
+    }
+
     .about {
+      max-width: 700px;
+      margin: 30px auto;
+      font-size: 1.1rem;
       text-align: center;
-      margin: 30px 0 10px;
-      font-size: 18px;
-      animation: typewriter 30s steps(60, end) infinite;
-      white-space: nowrap;
-      overflow: hidden;
-      border-right: 2px solid #39ff14;
-      width: fit-content;
-      margin-left: auto;
-      margin-right: auto;
-      z-index: 1;
+      font-style: italic;
+      line-height: 1.6;
+      padding: 0 20px;
+    }
+
+    /* Section Styling */
+    section {
+      margin: 80px 0;
+      padding: 0 20px;
+    }
+
+    .section-title {
+      text-align: center;
+      font-size: 2.5rem;
+      margin-bottom: 50px;
       position: relative;
+      display: inline-block;
+      left: 50%;
+      transform: translateX(-50%);
     }
 
-    @keyframes typewriter {
-      0% { width: 0 }
-      50% { width: 100% }
-      100% { width: 0 }
+    .section-title::after {
+      content: '';
+      position: absolute;
+      bottom: -10px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 60px;
+      height: 4px;
+      background: var(--accent);
+      border-radius: 2px;
     }
 
-    
-
-
+    /* Gallery */
     .gallery {
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: center;
-      gap: 20px;
-      margin-top: 40px;
-      z-index: 1;
+      max-width: 400px;
+      height: 400px;
+      margin: 0 auto;
       position: relative;
+      border-radius: 20px;
+      overflow: hidden;
+      box-shadow: 0 15px 50px rgba(0, 255, 247, 0.3);
+      background: var(--card-bg);
+      z-index: 10;
+    }
+
+    .gallery-item {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      opacity: 0;
+      animation: slideShow 12s infinite;
+      z-index: 10;
+    }
+
+    .gallery-item:nth-child(1) {
+      animation-delay: 0s;
+    }
+
+    .gallery-item:nth-child(2) {
+      animation-delay: 4s;
+    }
+
+    .gallery-item:nth-child(3) {
+      animation-delay: 8s;
+    }
+
+    @keyframes slideShow {
+      0% {
+        opacity: 0;
+        transform: scale(0.8);
+        filter: blur(10px);
+      }
+      8% {
+        opacity: 1;
+        transform: scale(1);
+        filter: blur(0);
+      }
+      25% {
+        opacity: 1;
+        transform: scale(1);
+        filter: blur(0);
+      }
+      33% {
+        opacity: 0;
+        transform: scale(1.2) rotate(5deg);
+        filter: blur(10px);
+      }
+      100% {
+        opacity: 0;
+        transform: scale(0.8);
+        filter: blur(10px);
+      }
     }
 
     .gallery img {
-      width: 200px;
-      height: 150px;
+      width: 100%;
+      height: 100%;
       object-fit: cover;
-      border: 2px solid var(--accent);
-      box-shadow: 0 0 15px var(--accent);
+      display: block;
+      border-radius: 20px;
+    }
+
+    .gallery-item.crack-effect {
+      animation: crackAndSlide 12s infinite;
+    }
+
+    @keyframes crackAndSlide {
+      0% {
+        opacity: 0;
+        clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%);
+      }
+      8% {
+        opacity: 1;
+        clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%);
+      }
+      25% {
+        opacity: 1;
+        clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%);
+      }
+      28% {
+        clip-path: polygon(0 0, 50% 0, 50% 50%, 0 50%);
+      }
+      30% {
+        clip-path: polygon(50% 50%, 100% 50%, 100% 100%, 50% 100%);
+      }
+      32% {
+        clip-path: polygon(25% 25%, 75% 25%, 75% 75%, 25% 75%);
+      }
+      33% {
+        opacity: 0;
+        clip-path: polygon(50% 50%, 50% 50%, 50% 50%, 50% 50%);
+      }
+      100% {
+        opacity: 0;
+      }
+    }
+
+    /* Skills Grid */
+    .skills-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 25px;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    .skill-card {
+      background: var(--card-bg);
+      padding: 30px;
+      border-radius: 15px;
+      border: 2px solid transparent;
+      transition: all 0.3s;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .skill-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(0, 255, 247, 0.1), transparent);
+      transition: left 0.5s;
+    }
+
+    .skill-card:hover::before {
+      left: 100%;
+    }
+
+    .skill-card:hover {
+      border-color: var(--accent);
+      transform: translateY(-5px);
+      box-shadow: 0 10px 30px rgba(0, 255, 247, 0.2);
+    }
+
+    .skill-card i {
+      font-size: 2.5rem;
+      color: var(--accent);
+      margin-bottom: 15px;
+    }
+
+    .skill-card h3 {
+      font-size: 1.3rem;
+      margin-bottom: 10px;
+    }
+
+    .skill-card p {
+      color: #888;
+      line-height: 1.6;
+    }
+
+    /* Projects Section */
+    .projects-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+      gap: 30px;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    .project-card {
+      background: var(--card-bg);
+      border-radius: 15px;
+      overflow: hidden;
+      transition: transform 0.3s;
+      border: 2px solid transparent;
+    }
+
+    .project-card:hover {
+      transform: translateY(-10px);
+      border-color: var(--accent);
+      box-shadow: 0 15px 40px rgba(0, 255, 247, 0.2);
+    }
+
+    .project-header {
+      padding: 25px;
+      background: linear-gradient(135deg, rgba(0, 255, 247, 0.1), rgba(120, 115, 245, 0.1));
+    }
+
+    .project-header h3 {
+      font-size: 1.5rem;
+      margin-bottom: 10px;
+    }
+
+    .project-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 15px;
+    }
+
+    .tag {
+      background: var(--accent);
+      color: #000;
+      padding: 5px 12px;
+      border-radius: 20px;
+      font-size: 0.8rem;
+      font-weight: 600;
+    }
+
+    .project-body {
+      padding: 25px;
+    }
+
+    .project-body p {
+      color: #888;
+      line-height: 1.6;
+      margin-bottom: 20px;
+    }
+
+    .project-link {
+      display: inline-block;
+      color: var(--accent);
+      text-decoration: none;
+      font-weight: 600;
       transition: transform 0.3s;
     }
 
-    .gallery img:hover {
-      transform: scale(1.06);
+    .project-link:hover {
+      transform: translateX(5px);
     }
 
-    .skills {
-      margin-top: 40px;
-      text-align: center;
-    }
-
-    .skills ul {
-      list-style: none;
-      padding: 0;
-    }
-
-    .skills li {
-      padding: 8px;
-      font-size: 18px;
-    }
-
+    /* Contact Cards */
     .flip-cards {
       display: flex;
       flex-wrap: wrap;
       justify-content: center;
       gap: 20px;
       margin-top: 40px;
-      z-index: 1;
-      position: relative;
     }
 
     .flip-card {
@@ -217,19 +520,115 @@
       align-items: center;
       justify-content: center;
       border-radius: 10px;
-      font-size: 28px;
+      font-size: 2rem;
     }
 
     .flip-card-front {
-      background-color: #1a1a1a;
+      background-color: var(--card-bg);
+    }
+
+    .flip-card-front a, .flip-card-back a {
       color: var(--accent);
+      text-decoration: none;
     }
 
     .flip-card-back {
       background-color: var(--accent);
       transform: rotateY(180deg);
-      color: black;
-      font-weight: bold;
+    }
+
+    .flip-card-back a {
+      color: #000;
+    }
+
+    /* Footer */
+    footer {
+      text-align: center;
+      padding: 40px 20px;
+      margin-top: 80px;
+      border-top: 1px solid rgba(0, 255, 247, 0.2);
+    }
+
+    footer p {
+      color: #888;
+      margin-top: 10px;
+    }
+
+    /* Responsive Design */
+    @media (max-width: 768px) {
+      .nav-links {
+        position: fixed;
+        top: 60px;
+        left: -100%;
+        flex-direction: column;
+        background: rgba(14, 14, 14, 0.98);
+        width: 100%;
+        padding: 30px;
+        gap: 20px;
+        transition: left 0.3s;
+      }
+
+      .nav-links.active {
+        left: 0;
+      }
+
+      .mobile-menu-btn {
+        display: block;
+      }
+
+      header h1 {
+        font-size: 1.8rem;
+      }
+
+      .profile-pic {
+        width: 140px;
+        height: 140px;
+      }
+
+      .section-title {
+        font-size: 2rem;
+      }
+
+      .gallery {
+        max-width: 300px;
+        height: 300px;
+      }
+
+      .skills-grid, .projects-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .flip-card {
+        width: 80px;
+        height: 80px;
+      }
+
+      .flip-card-front, .flip-card-back {
+        font-size: 1.5rem;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .container {
+        padding: 15px;
+      }
+
+      header {
+        margin-top: 80px;
+        padding: 20px 0;
+      }
+
+      header h1 {
+        font-size: 1.5rem;
+      }
+
+      .about {
+        font-size: 1rem;
+      }
+
+      .section-title {
+        font-size: 1.7rem;
+      }
     }
   </style>
 </head>
@@ -237,135 +636,248 @@
 <body data-theme="dark">
   <div id="particles-js"></div>
 
-  <header>
-    <div class="profile-pic"></div>
-    <h1 style="font-family: 'Indie Flower', cursive;">
-<b># ℕι𝚛𝚖αℓ__𝙺𝚛...*~>✨</b></h1>
-  </header>
-
-  <div class="about"><i>
-    from somewhere in India: a curious mind exploring creativity, logic, and code.</i>
-  </div>
-  
-
-  <section class="gallery">
-    <img src="https://github.com/the-invincible-genius/its_invincible/blob/main/IMG_20250807_205828.jpg?raw=true" alt="Nirmal">
-    <img src="https://github.com/the-invincible-genius/its_invincible/blob/main/IMG_20250610_193916.jpg?raw=true" alt="Nirmal">
-    <img src="https://github.com/the-invincible-genius/its_invincible/blob/main/IMG_20250620_075322.jpg?raw=true" alt="Nirmal">
-  </section>
-
-  <section class="skills">
-    <h2> <u><b>Skills</b></u></h2>
-    <ul>
-      <li>* Mastering Kali Linux 𓆰𓆪</li>
-      <li>* Completed ISc from School Of Excellence,Godda 🎓</li>
-      <li>* Mastering Python </></li>
-      <li>* Mastering SQL ⛁</li>
-      <li>* Working on Databases 🖧</li>
-      <li>* Application creation by integrating pages ⚙️</li>
-      <li>* Soft Skills: Communication, Collaboration, Critical Thinking 🧩</li>
-      <li>* Chess Lover 👑</li>
-      <li>* Travel & Exploration 🌐</li>
-    </ul>
-  </section>
-
-  <div class="flip-cards">
-  <!-- Mail -->
-  <div class="flip-card">
-    <div class="flip-card-inner">
-      <div class="flip-card-front">
-        <a href="mailto:invinciblenirmalkushwaha01@gmail.com">
-          <i class="fas fa-envelope"></i>
-        </a>
-      </div>
-      <div class="flip-card-back">
-        <a href="mailto:invinciblenirmalkushwaha01@gmail.com">
-          <i class="fas fa-envelope"></i>
-        </a>
-      </div>
+  <!-- Navigation -->
+  <nav>
+    <div class="container">
+      <div class="nav-logo">NK</div>
+      <ul class="nav-links" id="navLinks">
+        <li><a href="#home">Home</a></li>
+        <li><a href="#about">About</a></li>
+        <li><a href="#skills">Skills</a></li>
+        <li><a href="#projects">Projects</a></li>
+        <li><a href="#contact">Contact</a></li>
+      </ul>
+      <button class="theme-toggle" onclick="toggleTheme()">
+        <i class="fas fa-moon"></i>
+      </button>
+      <button class="mobile-menu-btn" onclick="toggleMenu()">
+        <i class="fas fa-bars"></i>
+      </button>
     </div>
-  </div>
+  </nav>
 
-  <!-- Telegram -->
-  <div class="flip-card">
-    <div class="flip-card-inner">
-      <div class="flip-card-front">
-        <a href="https://t.me/+2OE1hyC9N4thMmI1" target="_blank">
-          <i class="fab fa-telegram-plane"></i>
-        </a>
-      </div>
-      <div class="flip-card-back">
-        <a href="https://t.me/+2OE1hyC9N4thMmI1" target="_blank">
-          <i class="fab fa-telegram-plane"></i>
-        </a>
-      </div>
-    </div>
-  </div>
+  <div class="container">
+    <!-- Header Section -->
+    <header id="home">
+      <div class="profile-pic"></div>
+      <h1><b>✨# ℕι𝚛𝚖αℓ__𝙺𝚛...*~>✨</b></h1>
+      <p class="subtitle">Cybersecurity Enthusiast | Python Developer | Database Engineer</p>
+    </header>
 
-  <!-- GitHub -->
-  <div class="flip-card">
-    <div class="flip-card-inner">
-      <div class="flip-card-front">
-        <a href="https://github.com/the-invincible-genius/portfolio" target="_blank">
-          <i class="fab fa-github"></i>
-        </a>
+    <!-- About Section -->
+    <section id="about">
+      <div class="about">
+        <i>From somewhere in India: a curious mind exploring creativity, logic, and code. Passionate about cybersecurity, automation, and building innovative solutions that make a difference.</i>
       </div>
-      <div class="flip-card-back">
-        <a href="https://github.com/the-invincible-genius/portfolio" target="_blank">
-          <i class="fab fa-github"></i>
-        </a>
-      </div>
-    </div>
-  </div>
+    </section>
 
-  <!-- WhatsApp -->
-  <div class="flip-card">
-    <div class="flip-card-inner">
-      <div class="flip-card-front">
-        <a href="https://chat.whatsapp.com/EjJP4mk3wRXGJ8BK3HtuGe" target="_blank">
-          <i class="fab fa-whatsapp"></i>
-        </a>
+    <!-- Gallery Section -->
+    <section>
+      <h2 class="section-title">Gallery</h2>
+      <div class="gallery">
+        <div class="gallery-item">
+          <img src="https://github.com/the-invincible-genius/its_invincible/blob/main/system_photo.jpeg?raw=true" alt="Nirmal">
+        </div>
+        <div class="gallery-item">
+          <img src="https://github.com/the-invincible-genius/its_invincible/blob/main/Kali-Linux-Terminal-7.jpg?raw=true" alt="Nirmal">
+        </div>
+        <div class="gallery-item">
+          <img src="https://github.com/the-invincible-genius/its_invincible/blob/main/IMG_20250620_075322.jpg?raw=true" alt="Nirmal">
+        </div>
       </div>
-      <div class="flip-card-back">
-        <a href="https://chat.whatsapp.com/EjJP4mk3wRXGJ8BK3HtuGe" target="_blank">
-          <i class="fab fa-whatsapp"></i>
-        </a>
-      </div>
-    </div>
-  </div>
+    </section>
 
-  <!-- Python -->
-  <div class="flip-card">
-    <div class="flip-card-inner">
-      <div class="flip-card-front">
-        <a href="https://www.python.org" target="_blank">
+    <!-- Skills Section -->
+    <section id="skills">
+      <h2 class="section-title">Skills & Expertise</h2>
+      <div class="skills-grid">
+        <div class="skill-card">
+          <i class="fab fa-linux"></i>
+          <h3>Kali Linux</h3>
+          <p>Mastering penetration testing, ethical hacking, and security assessment tools</p>
+        </div>
+        <div class="skill-card">
           <i class="fab fa-python"></i>
-        </a>
+          <h3>Python Development</h3>
+          <p>Building automation scripts, web applications, and data analysis tools</p>
+        </div>
+        <div class="skill-card">
+          <i class="fas fa-database"></i>
+          <h3>SQL & Databases</h3>
+          <p>Database design, optimization, and management with advanced querying</p>
+        </div>
+        <div class="skill-card">
+          <i class="fas fa-cogs"></i>
+          <h3>Application Integration</h3>
+          <p>Creating seamless integrations between various platforms and services</p>
+        </div>
+        <div class="skill-card">
+          <i class="fas fa-users"></i>
+          <h3>Soft Skills</h3>
+          <p>Communication, collaboration, critical thinking, and problem-solving</p>
+        </div>
+        <div class="skill-card">
+          <i class="fas fa-chess"></i>
+          <h3>Strategic Thinking</h3>
+          <p>Chess enthusiast with a passion for strategic planning and analysis</p>
+        </div>
       </div>
-      <div class="flip-card-back">
-        <a href="https://www.python.org" target="_blank">
-          <i class="fab fa-python"></i>
-        </a>
+    </section>
+
+    <!-- Projects Section -->
+    <section id="projects">
+      <h2 class="section-title">Featured Projects</h2>
+      <div class="projects-grid">
+        <div class="project-card">
+          <div class="project-header">
+            <h3>Security Automation Suite</h3>
+            <div class="project-tags">
+              <span class="tag">Python</span>
+              <span class="tag">Kali Linux</span>
+              <span class="tag">Automation</span>
+            </div>
+          </div>
+          <div class="project-body">
+            <p>Automated security assessment tools for vulnerability scanning and penetration testing workflows</p>
+            <a href="#" class="project-link">Learn More →</a>
+          </div>
+        </div>
+
+        <div class="project-card">
+          <div class="project-header">
+            <h3>Database Management System</h3>
+            <div class="project-tags">
+              <span class="tag">SQL</span>
+              <span class="tag">Python</span>
+              <span class="tag">Backend</span>
+            </div>
+          </div>
+          <div class="project-body">
+            <p>Comprehensive database solution with advanced querying capabilities and optimization techniques</p>
+            <a href="#" class="project-link">Learn More →</a>
+          </div>
+        </div>
+
+        <div class="project-card">
+          <div class="project-header">
+            <h3>Web Application Framework</h3>
+            <div class="project-tags">
+              <span class="tag">Python</span>
+              <span class="tag">API</span>
+              <span class="tag">Integration</span>
+            </div>
+          </div>
+          <div class="project-body">
+            <p>Full-stack web application with seamless page integration and responsive design principles</p>
+            <a href="#" class="project-link">Learn More →</a>
+          </div>
+        </div>
       </div>
-    </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section id="contact">
+      <h2 class="section-title">Let's Connect</h2>
+      <div class="flip-cards">
+        <div class="flip-card">
+          <div class="flip-card-inner">
+            <div class="flip-card-front">
+              <a href="mailto:invinciblenirmalkushwaha01@gmail.com">
+                <i class="fas fa-envelope"></i>
+              </a>
+            </div>
+            <div class="flip-card-back">
+              <a href="mailto:invinciblenirmalkushwaha01@gmail.com">
+                <i class="fas fa-envelope"></i>
+              </a>
+            </div>
+          </div>
+        </div>
+
+        <div class="flip-card">
+          <div class="flip-card-inner">
+            <div class="flip-card-front">
+              <a href="https://t.me/+2OE1hyC9N4thMmI1" target="_blank">
+                <i class="fab fa-telegram-plane"></i>
+              </a>
+            </div>
+            <div class="flip-card-back">
+              <a href="https://t.me/+2OE1hyC9N4thMmI1" target="_blank">
+                <i class="fab fa-telegram-plane"></i>
+              </a>
+            </div>
+          </div>
+        </div>
+
+        <div class="flip-card">
+          <div class="flip-card-inner">
+            <div class="flip-card-front">
+              <a href="https://github.com/the-invincible-genius/portfolio" target="_blank">
+                <i class="fab fa-github"></i>
+              </a>
+            </div>
+            <div class="flip-card-back">
+              <a href="https://github.com/the-invincible-genius/portfolio" target="_blank">
+                <i class="fab fa-github"></i>
+              </a>
+            </div>
+          </div>
+        </div>
+
+        <div class="flip-card">
+          <div class="flip-card-inner">
+            <div class="flip-card-front">
+              <a href="https://chat.whatsapp.com/EjJP4mk3wRXGJ8BK3HtuGe" target="_blank">
+                <i class="fab fa-whatsapp"></i>
+              </a>
+            </div>
+            <div class="flip-card-back">
+              <a href="https://chat.whatsapp.com/EjJP4mk3wRXGJ8BK3HtuGe" target="_blank">
+                <i class="fab fa-whatsapp"></i>
+              </a>
+            </div>
+          </div>
+        </div>
+
+        <div class="flip-card">
+          <div class="flip-card-inner">
+            <div class="flip-card-front">
+              <a href="https://www.python.org" target="_blank">
+                <i class="fab fa-python"></i>
+              </a>
+            </div>
+            <div class="flip-card-back">
+              <a href="https://www.python.org" target="_blank">
+                <i class="fab fa-python"></i>
+              </a>
+            </div>
+          </div>
+        </div>
+
+        <div class="flip-card">
+          <div class="flip-card-inner">
+            <div class="flip-card-front">
+              <a href="https://en.wikipedia.org/wiki/SQL" target="_blank">
+                <i class="fas fa-database"></i>
+              </a>
+            </div>
+            <div class="flip-card-back">
+              <a href="https://en.wikipedia.org/wiki/SQL" target="_blank">
+                <i class="fas fa-database"></i>
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
   </div>
 
-  <!-- SQL -->
-  <div class="flip-card">
-    <div class="flip-card-inner">
-      <div class="flip-card-front">
-        <a href="https://en.wikipedia.org/wiki/SQL" target="_blank">
-          <i class="fas fa-database"></i>
-        </a>
-      </div>
-      <div class="flip-card-back">
-        <a href="https://en.wikipedia.org/wiki/SQL" target="_blank">
-          <i class="fas fa-database"></i>
-        </a>
-      </div>
-    </div>
-  </div>
-</div>
+  <!-- Footer -->
+  <footer>
+    <p>© 2025 Nirmal Kumar. All rights reserved.</p>
+    <p>Built with passion and code ❤️</p>
+  </footer>
+
   <script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
   <script>
     particlesJS("particles-js", {
@@ -390,6 +902,27 @@
           onhover: { enable: true, mode: "repulse" }
         }
       }
+    });
+
+    function toggleTheme() {
+      const body = document.body;
+      const currentTheme = body.getAttribute('data-theme');
+      const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+      body.setAttribute('data-theme', newTheme);
+      
+      const icon = document.querySelector('.theme-toggle i');
+      icon.className = newTheme === 'dark' ? 'fas fa-moon' : 'fas fa-sun';
+    }
+
+    function toggleMenu() {
+      const navLinks = document.getElementById('navLinks');
+      navLinks.classList.toggle('active');
+    }
+
+    document.querySelectorAll('.nav-links a').forEach(link => {
+      link.addEventListener('click', () => {
+        document.getElementById('navLinks').classList.remove('active');
+      });
     });
   </script>
 </body>
