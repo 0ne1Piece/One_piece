@@ -1,0 +1,790 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TOMATO Objective — Q1–50</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=IBM+Plex+Mono:wght@400;600&family=IBM+Plex+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0e0e10;
+    --surface: #16161a;
+    --card: #1e1e24;
+    --border: #2a2a34;
+    --accent: #e8c547;
+    --accent2: #5b8dee;
+    --accent3: #e85d75;
+    --text: #e8e8f0;
+    --muted: #7a7a8c;
+    --tag-bg: #252530;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'IBM Plex Sans', sans-serif;
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* ── HEADER ── */
+  header {
+    padding: 3rem 2rem 2rem;
+    text-align: center;
+    border-bottom: 1px solid var(--border);
+    position: relative;
+  }
+  header::before {
+    content: '';
+    position: absolute; inset: 0;
+    background: radial-gradient(ellipse 80% 60% at 50% -10%, rgba(232,197,71,.12), transparent);
+    pointer-events: none;
+  }
+  header h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(2rem, 5vw, 3.5rem);
+    font-weight: 900;
+    letter-spacing: -1px;
+    color: var(--accent);
+  }
+  header p {
+    margin-top: .5rem;
+    color: var(--muted);
+    font-size: .9rem;
+    font-family: 'IBM Plex Mono', monospace;
+    letter-spacing: .1em;
+    text-transform: uppercase;
+  }
+
+  /* ── FILTER BAR ── */
+  .filter-bar {
+    display: flex; flex-wrap: wrap; gap: .5rem;
+    padding: 1.5rem 2rem;
+    border-bottom: 1px solid var(--border);
+    background: var(--surface);
+    position: sticky; top: 0; z-index: 50;
+  }
+  .filter-btn {
+    padding: .35rem .85rem;
+    border-radius: 999px;
+    border: 1px solid var(--border);
+    background: var(--tag-bg);
+    color: var(--muted);
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: .78rem;
+    cursor: pointer;
+    transition: all .2s;
+    white-space: nowrap;
+  }
+  .filter-btn:hover, .filter-btn.active {
+    border-color: var(--accent);
+    color: var(--accent);
+    background: rgba(232,197,71,.08);
+  }
+
+  /* ── MAIN GRID ── */
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(min(100%, 420px), 1fr));
+    gap: 1.25rem;
+    padding: 2rem;
+    max-width: 1400px;
+    margin: 0 auto;
+  }
+
+  /* ── CARD ── */
+  .card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    overflow: hidden;
+    transition: border-color .2s, transform .2s;
+    display: flex; flex-direction: column;
+  }
+  .card:hover {
+    border-color: var(--accent);
+    transform: translateY(-2px);
+  }
+
+  .card-head {
+    display: flex; align-items: center; gap: .75rem;
+    padding: .85rem 1.1rem .7rem;
+    border-bottom: 1px solid var(--border);
+  }
+  .q-num {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--accent);
+    min-width: 2.2rem;
+  }
+  .q-topic {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: .72rem;
+    padding: .25rem .6rem;
+    border-radius: 999px;
+    border: 1px solid;
+    white-space: nowrap;
+  }
+
+  .card-body {
+    padding: 1rem 1.1rem;
+    flex: 1;
+  }
+  .q-text {
+    font-size: .92rem;
+    line-height: 1.65;
+    color: var(--text);
+  }
+  .q-text .math {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: .88em;
+    color: var(--accent2);
+  }
+
+  /* options */
+  .options {
+    margin-top: .85rem;
+    display: flex; flex-direction: column; gap: .35rem;
+  }
+  .opt {
+    display: flex; gap: .5rem; align-items: flex-start;
+    font-size: .87rem;
+    padding: .25rem 0;
+    color: var(--muted);
+  }
+  .opt-label {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: .8rem;
+    color: var(--accent);
+    min-width: 1.4rem;
+  }
+
+  /* card footer */
+  .card-foot {
+    padding: .75rem 1.1rem;
+    border-top: 1px solid var(--border);
+    display: flex; gap: .6rem;
+  }
+  .btn {
+    flex: 1;
+    padding: .45rem;
+    border-radius: 8px;
+    border: 1px solid var(--border);
+    background: transparent;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: .78rem;
+    cursor: pointer;
+    letter-spacing: .04em;
+    transition: all .2s;
+  }
+  .btn-hint {
+    color: var(--accent2);
+    border-color: rgba(91,141,238,.35);
+  }
+  .btn-hint:hover, .btn-hint.revealed {
+    background: rgba(91,141,238,.12);
+    border-color: var(--accent2);
+  }
+  .btn-ans {
+    color: var(--accent);
+    border-color: rgba(232,197,71,.35);
+  }
+  .btn-ans:hover, .btn-ans.revealed {
+    background: rgba(232,197,71,.1);
+    border-color: var(--accent);
+  }
+
+  /* hint / solution box */
+  .reveal-box {
+    margin: 0 1.1rem .85rem;
+    border-radius: 8px;
+    border: 1px solid var(--border);
+    overflow: hidden;
+    display: none;
+  }
+  .reveal-box.show { display: block; }
+  .reveal-box .rb-head {
+    padding: .4rem .75rem;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: .72rem;
+    letter-spacing: .08em;
+    text-transform: uppercase;
+    font-weight: 600;
+  }
+  .rb-hint .rb-head { background: rgba(91,141,238,.15); color: var(--accent2); }
+  .rb-ans  .rb-head { background: rgba(232,197,71,.12); color: var(--accent); }
+  .reveal-box .rb-body {
+    padding: .65rem .75rem;
+    font-size: .86rem;
+    line-height: 1.7;
+    color: var(--text);
+  }
+  .reveal-box .rb-body .step {
+    font-family: 'IBM Plex Mono', monospace;
+    color: var(--accent2);
+    font-size: .83em;
+    display: block;
+    margin: .15rem 0;
+  }
+  .correct-opt {
+    font-family: 'IBM Plex Mono', monospace;
+    color: var(--accent3);
+    font-weight: 600;
+  }
+
+  /* topic colours */
+  .t-arith    { color: #e8c547; border-color: rgba(232,197,71,.4);  }
+  .t-speed    { color: #5b8dee; border-color: rgba(91,141,238,.4);  }
+  .t-seq      { color: #7eda9c; border-color: rgba(126,218,156,.4); }
+  .t-algebra  { color: #e887c0; border-color: rgba(232,135,192,.4); }
+  .t-numtheo  { color: #f4a261; border-color: rgba(244,162,97,.4);  }
+  .t-calendar { color: #a8dadc; border-color: rgba(168,218,220,.4); }
+  .t-sets     { color: #c77dff; border-color: rgba(199,125,255,.4); }
+  .t-logic    { color: #74b3ce; border-color: rgba(116,179,206,.4); }
+  .t-analysis { color: #f4d35e; border-color: rgba(244,211,94,.4);  }
+  .t-comb     { color: #90e0ef; border-color: rgba(144,224,239,.4); }
+
+  /* hidden card */
+  .card[data-hidden="true"] { display: none; }
+
+  /* count badge */
+  #count-badge {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: .78rem;
+    color: var(--muted);
+    padding: 0 2rem 1rem;
+    text-align: right;
+    max-width: 1400px;
+    margin: 0 auto;
+  }
+
+  @media (max-width: 600px) {
+    .grid { padding: 1rem; gap: 1rem; }
+    header { padding: 2rem 1rem 1.5rem; }
+    .filter-bar { padding: 1rem; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <h1>TOMATO Objective</h1>
+  <p>Questions 1 – 50 &nbsp;·&nbsp; Click hint / answer to reveal</p>
+</header>
+
+<div class="filter-bar" id="filterBar">
+  <button class="filter-btn active" data-topic="all">All</button>
+  <button class="filter-btn" data-topic="arith">Arithmetic &amp; %</button>
+  <button class="filter-btn" data-topic="speed">Work &amp; Speed</button>
+  <button class="filter-btn" data-topic="seq">Sequences</button>
+  <button class="filter-btn" data-topic="algebra">Algebra</button>
+  <button class="filter-btn" data-topic="numtheo">Number Theory</button>
+  <button class="filter-btn" data-topic="calendar">Calendar &amp; Clock</button>
+  <button class="filter-btn" data-topic="sets">Set Theory</button>
+  <button class="filter-btn" data-topic="logic">Logic &amp; Languages</button>
+  <button class="filter-btn" data-topic="analysis">Real Analysis</button>
+  <button class="filter-btn" data-topic="comb">Combinatorics</button>
+</div>
+
+<div id="count-badge">Showing <span id="vis-count">50</span> / 50 questions</div>
+
+<div class="grid" id="grid"></div>
+
+<script>
+/* ─────────────────────────────────────────────
+   DATA — 50 questions
+───────────────────────────────────────────── */
+const Qs = [
+  {
+    n:1, topic:"arith", tLabel:"Arithmetic & %",
+    q:"A worker suffers a 20% cut in wages. He regains his original pay by obtaining a rise of",
+    opts:["20%","22.5%","25%","27.5%"],
+    hint:"If original wage = x, after 20% cut it becomes 0.8x. What percentage of 0.8x equals 0.2x?",
+    ans:"(c) 25%",
+    sol:"New wage = 0.8x. Rise needed = 0.2x. Rise % on new wage = (0.2x / 0.8x) × 100 = 25%."
+  },
+  {
+    n:2, topic:"speed", tLabel:"Work & Speed",
+    q:"If m men can do a job in d days, then the number of days in which m + r men can do the job is",
+    opts:["d + r","(d/m)(m + r)","d/(m + r)","md/(m + r)"],
+    hint:"Total work = m × d man-days. Divide by (m + r) men.",
+    ans:"(d) md/(m + r)",
+    sol:"Total work = md man-days. With (m+r) men: time = md/(m+r)."
+  },
+  {
+    n:3, topic:"speed", tLabel:"Work & Speed",
+    q:"A boy walks to school at 6 kmph and returns at 2 kmph. His average speed (in kmph) is",
+    opts:["3","4","5","√12"],
+    hint:"Average speed for equal distances = 2ab/(a+b), not (a+b)/2.",
+    ans:"(a) 3",
+    sol:"Avg speed = 2 × 6 × 2 / (6 + 2) = 24/8 = 3 kmph."
+  },
+  {
+    n:4, topic:"speed", tLabel:"Work & Speed",
+    q:"A car travels P→Q at 30 kmph and Q→P at 40 kmph. Average speed (kmph) is nearest to",
+    opts:["33","34","35","36"],
+    hint:"Use harmonic mean: 2ab/(a+b).",
+    ans:"(b) 34",
+    sol:"Avg = 2×30×40/(30+40) = 2400/70 ≈ 34.3 kmph, nearest to 34."
+  },
+  {
+    n:5, topic:"arith", tLabel:"Arithmetic & %",
+    q:"A man invests ₹10000; ₹4000 at 5%, ₹3500 at 4%, rest at α%. Total interest = ₹500. Then α =",
+    opts:["6.2","6.3","6.4","6.5"],
+    hint:"Interest from ₹4000 and ₹3500 first. Remaining ₹2500 at α%.",
+    ans:"(c) 6.4",
+    sol:"I₁ = 200, I₂ = 140, rest = ₹2500. 200+140+25α = 500 → α = 160/25 = 6.4."
+  },
+  {
+    n:6, topic:"seq", tLabel:"Sequences",
+    q:"Let x₁,x₂,…,x₁₀₀ be positive integers with xᵢ + xᵢ₊₁ = k for all i. If x₁₀ = 1, then x₁ =",
+    opts:["k","k−1","k+1","1"],
+    hint:"The sequence alternates: odd-indexed terms equal one value, even-indexed another.",
+    ans:"(b) k − 1",
+    sol:"x₁₀=1 (even index) ⇒ x₉ = k−1, x₈=1, ... The odd-indexed terms = k−1 and even-indexed = 1. x₁ (odd) = k−1."
+  },
+  {
+    n:7, topic:"seq", tLabel:"Sequences",
+    q:"a₀=1, a₁=1, aₙ=aₙ₋₁·aₙ₋₂+1 for n>1. Then a₄₆₅ and a₄₆₆ are",
+    opts:["odd & even","odd & odd","even & even","even & odd"],
+    hint:"Work out the parity pattern: which positions mod 3 give even terms?",
+    ans:"(b) Both odd",
+    sol:"Pattern: indices ≡ 2 (mod 3) are even, rest odd. 465 ≡ 0 (mod 3) → odd. 466 ≡ 1 (mod 3) → odd."
+  },
+  {
+    n:8, topic:"speed", tLabel:"Work & Speed",
+    q:"Two trains of equal length L travel at V₁, V₂ mph (opposite directions), cross in T seconds. L in feet (1 mile = 5280 ft) is",
+    opts:["11T/15(V₁+V₂)","15T/11(V₁+V₂)","11(V₁+V₂)T/15","11(V₁+V₂)/15T"],
+    hint:"Convert mph→ft/s: 1 mph = 5280/3600 = 22/15 ft/s. Relative speed × T = 2L.",
+    ans:"(c) 11(V₁+V₂)T/15",
+    sol:"Relative speed = 22(V₁+V₂)/15 ft/s. 2L = 22(V₁+V₂)T/15 → L = 11(V₁+V₂)T/15."
+  },
+  {
+    n:9, topic:"arith", tLabel:"Arithmetic & %",
+    q:"A salesman sold two pipes at ₹12 each — 20% profit on one, 20% loss on the other. Overall he",
+    opts:["Lost Re 1","Gained Re 1","Neither","Lost ₹2"],
+    hint:"Find cost price of each pipe separately from the selling price.",
+    ans:"(a) Lost Re 1",
+    sol:"CP of profit pipe = 12×100/120 = ₹10. CP of loss pipe = 12×100/80 = ₹15. Total CP=₹25, SP=₹24. Loss = ₹1."
+  },
+  {
+    n:10, topic:"algebra", tLabel:"Algebra",
+    q:"The value of (256)⁰·¹⁶ × (16)⁰·¹⁸ is",
+    opts:["4","16","64","256.25"],
+    hint:"Express both as powers of 2: 256 = 2⁸, 16 = 2⁴.",
+    ans:"(a) 4",
+    sol:"= 2^(8×0.16) × 2^(4×0.18) = 2^1.28 × 2^0.72 = 2^2 = 4."
+  },
+  {
+    n:11, topic:"numtheo", tLabel:"Number Theory",
+    q:"The units digit of 1! + 2! + 3! + … + 99! is",
+    opts:["3","0","1","7"],
+    hint:"For n ≥ 5, n! ends in 0. Only need 1!+2!+3!+4!.",
+    ans:"(a) 3",
+    sol:"1!+2!+3!+4! = 1+2+6+24 = 33. All higher factorials end in 0. Units digit = 3."
+  },
+  {
+    n:12, topic:"calendar", tLabel:"Calendar & Clock",
+    q:"July 3, 1977 was a Sunday. Then July 3, 1970 was a",
+    opts:["Wednesday","Friday","Sunday","Tuesday"],
+    hint:"Count total days between the two dates, then find remainder mod 7.",
+    ans:"(b) Friday",
+    sol:"Total days from Jul 3 1970 to Jul 3 1977 = 181+365+366+1095+366+184 = 2557. 2557 mod 7 = 2. Sunday − 2 = Friday."
+  },
+  {
+    n:13, topic:"calendar", tLabel:"Calendar & Clock",
+    q:"June 10, 1979 was a Sunday. Then May 10, 1972 was a",
+    opts:["Wednesday","Thursday","Tuesday","Friday"],
+    hint:"Count total days between the dates mod 7.",
+    ans:"(a) Wednesday",
+    sol:"Total days = 2587. 2587 mod 7 = 4. Sunday − 4 = Wednesday."
+  },
+  {
+    n:14, topic:"speed", tLabel:"Work & Speed",
+    q:"Man leaves home 14:30, arrives village at 15:15 (village clock). Stays 25 min, returns via route (5/4)× longer at 2× speed, arrives home 16:00. The village clock is",
+    opts:["10 min slow","5 min slow","5 min fast","20 min fast"],
+    hint:"Let travel-to-village time = t. Return time = (5/4)t / 2 = 5t/8. Total elapsed = 13t/8 + 25 = 90 min.",
+    ans:"(c) 5 min fast",
+    sol:"13t/8 + 25 = 90 → t = 40 min. Should arrive 14:30+40 = 15:10. Village shows 15:15 → 5 min fast."
+  },
+  {
+    n:15, topic:"algebra", tLabel:"Algebra",
+    q:"If (a+b)/(b+c) = (c+d)/(d+a), then",
+    opts:["a = c","either a=c or a+b+c+d=0","a+b+c+d=0","a=c and b=d"],
+    hint:"Cross-multiply and rearrange; factor out (a−c).",
+    ans:"(b) either a = c or a+b+c+d = 0",
+    sol:"Cross-multiplying and rearranging gives (a−c)(a+b+c+d) = 0."
+  },
+  {
+    n:16, topic:"algebra", tLabel:"Algebra",
+    q:"(1+q)(1+q²)(1+q⁴)(1+q⁸)(1+q¹⁶)(1+q³²)(1+q⁶⁴), q≠1, equals",
+    opts:["(1−q¹²⁸)/(1−q)","(1−q⁶⁴)/(1−q)","(1−q^(telescoping))/(1−q)","None"],
+    hint:"Multiply both sides by (1−q) and use the difference-of-squares identity repeatedly.",
+    ans:"(a) (1 − q¹²⁸)/(1 − q)",
+    sol:"Multiplying by (1−q) telescopes: (1−q)·E = (1−q²)·… = (1−q¹²⁸). So E = (1−q¹²⁸)/(1−q)."
+  },
+  {
+    n:17, topic:"arith", tLabel:"Arithmetic & %",
+    q:"In an election, 10% didn't vote, 60 blank votes, two candidates. Winner got 47% of listed voters and 308 more votes than rival. Number of voters on list is",
+    opts:["3600","6200","4575","6028"],
+    hint:"Let total = x. Valid votes = 0.9x − 60. Winner = 0.47x, rival = 0.43x − 60.",
+    ans:"(b) 6200",
+    sol:"0.47x − (0.43x−60) = 308 → 0.04x + 60 = 308 → x = 248×25 = 6200."
+  },
+  {
+    n:18, topic:"arith", tLabel:"Arithmetic & %",
+    q:"A student's marks in 5 papers are in ratio 6:7:8:9:10. He got 3/5 of total full marks. In how many papers did he get >50%?",
+    opts:["2","3","4","5"],
+    hint:"Total ratio = 40. Each paper's score = (3/5)×(ratio/40) × full marks. Compare to 50%.",
+    ans:"(c) 4",
+    sol:"Paper 1: 45%, Paper 2: 52.5%, Papers 3,4,5: ≥60%. So 4 papers exceed 50%."
+  },
+  {
+    n:19, topic:"numtheo", tLabel:"Number Theory",
+    q:"Two runners race 3 km on a 300 m circular track, speeds in ratio 4:3. How often and where does the winner pass the other?",
+    opts:["4 times at start","Twice at start","Twice, 225 m from start","Twice, 75 m and 225 m"],
+    hint:"Show that meeting at non-zero positions leads to non-integer equations. Then find meeting-at-start count.",
+    ans:"(b) Twice, at the starting point",
+    sol:"Meeting condition: x = 300(3n−4m), only x=0 (integer solution). Min loops: n=4, m=3. In 10 total loops they meet at start twice (at loop 4 and loop 8 of faster runner). 12th loop exceeds race."
+  },
+  {
+    n:20, topic:"algebra", tLabel:"Algebra",
+    q:"If a+7b+3c+5d=0; 8a+4b+6c+2d=−16; 2a+6b+4c+8d=16; 5a+3b+7c+d=−16, then (a+d)(b+c) =",
+    opts:["16","−16","0","None"],
+    hint:"Add equations (2)+(3) to get a+b+c+d=0. Add (1)+(4) with the previous result.",
+    ans:"(b) −16",
+    sol:"(2)+(3): a+b+c+d=0 → a+d = −(b+c). (1)+(4): 6(a+d)+10(b+c)=−16 → 4(b+c)=−16 → b+c=−4, a+d=4. Product = −16."
+  },
+  {
+    n:21, topic:"algebra", tLabel:"Algebra",
+    q:"x,y positive integers, x>y. 3x+2y ≡ 2 (mod 5) and 2x+3y ≡ 3 (mod 5). The remainder when x−y is divided by 5 is",
+    opts:["2","1","4","None"],
+    hint:"Subtract the two congruences.",
+    ans:"(c) 4",
+    sol:"(3x+2y)−(2x+3y) ≡ 2−3 → x−y ≡ −1 ≡ 4 (mod 5)."
+  },
+  {
+    n:22, topic:"numtheo", tLabel:"Number Theory",
+    q:"Number of different solutions (x,y,z) of x+y+z=10, each a positive integer, is",
+    opts:["36","121","10³−10","¹⁰C₃−¹⁰C₂"],
+    hint:"This is stars-and-bars with positive integers: substitute x'=x−1, etc.",
+    ans:"(a) 36",
+    sol:"Equivalent to distributing 7 among 3 non-negative integers: ⁹C₂ = 36."
+  },
+  {
+    n:23, topic:"calendar", tLabel:"Calendar & Clock",
+    q:"Clock hands observed from 12:45 pm. They point same direction some time between",
+    opts:["1:03–1:04","1:04–1:05","1:05–1:06","1:06–1:07"],
+    hint:"The minute hand catches the hour hand after 12:00 every 12/11 × 60 min. Work from 12:00.",
+    ans:"(c) 1:05 – 1:06",
+    sol:"Hands coincide after 12:00 at 12×60/11 ≈ 65.45 min = 1:05:27. So between 1:05 and 1:06."
+  },
+  {
+    n:24, topic:"arith", tLabel:"Arithmetic & %",
+    q:"Packets: (5A+3B+7C)=₹24.50, (2A+1B+3C)=₹17. Cost of (16A+9B+23C) is",
+    opts:["₹55","₹75.50","₹100","Cannot determine"],
+    hint:"Check if (16,9,23) is a linear combination of (5,3,7) and (2,1,3).",
+    ans:"(c) ₹100",
+    sol:"(16,9,23) = 2×(5,3,7) + 3×(2,1,3). Cost = 2×24.50 + 3×17 = 49+51 = ₹100."
+  },
+  {
+    n:25, topic:"sets", tLabel:"Set Theory",
+    q:"Correct statement about {1, 2, {1,2,3}}?",
+    opts:["{1,2} ∈ {1,2,{1,2,3}}","{1,2} is a proper subset of {1,2,{1,2,3}}","{1,2,3} is a proper subset","3 ∈ {1,2,{1,2,3}}"],
+    hint:"The elements are: 1, 2, and {1,2,3} (as a single object). Membership vs subset are different.",
+    ans:"(b) {1,2} is a proper subset of {1,2,{1,2,3}}",
+    sol:"{1,2} ⊂ {1,2,{1,2,3}} since both 1 and 2 are elements, and {1,2,3} (the third element) is not in {1,2}. So it's a proper subset."
+  },
+  {
+    n:26, topic:"sets", tLabel:"Set Theory",
+    q:"A simplex is a collection where every non-empty subset of any member is also in the collection. Which of the following is a simplex on {1,…,n}?",
+    opts:["All subsets containing 1","All 4-element subsets","All non-empty subsets with no even number","All non-empty subsets except {1}"],
+    hint:"For each option, try to find a counterexample where a subset of a member is NOT in the collection.",
+    ans:"(c) All non-empty subsets with no even number",
+    sol:"Any subset of an odd-only set is also odd-only and non-empty (as long as we take non-empty subsets). The others fail: (a) {2}⊂{1,2} but 2∉S; (b) 3-element subsets missing; (d) {1}⊂{1,2} but excluded."
+  },
+  {
+    n:27, topic:"sets", tLabel:"Set Theory",
+    q:"S = {0, all even integers ±}. Which operations on any pair of elements of S yield only elements of S?",
+    opts:["[1],[2],[3],[4]","[1],[2],[3],[5]","[1],[3],[5]","[1],[2],[3]"],
+    hint:"Even+Even=Even ✓. Division: 6/4=1.5 ∉ S. Mean: (6+4)/2=5 (odd) ∉ S.",
+    ans:"(d) [1], [2], [3]",
+    sol:"Addition, subtraction, multiplication of two even integers give even integers. Division can yield non-integers or odd. Mean can yield odd integers."
+  },
+  {
+    n:28, topic:"sets", tLabel:"Set Theory",
+    q:"X={1,2,3,4}, Y={2,3,5,7}, Z={3,6,8,9}, W={2,4,8,10}. (X△Y)△(Z△W) =",
+    opts:["{4,8}","{1,5,6,10}","{1,2,3,5,6,7,9,10}","None"],
+    hint:"Compute X△Y first, then Z△W, then apply △ again.",
+    ans:"(c) {1,2,3,5,6,7,9,10}",
+    sol:"X△Y = {1,4,5,7}. Z△W = {2,3,4,6,9,10}. (X△Y)△(Z△W) = {1,2,3,5,6,7,9,10}."
+  },
+  {
+    n:29, topic:"sets", tLabel:"Set Theory",
+    q:"The set of numbers belonging to exactly two of X, Y, Z is",
+    opts:["(X∩Y)∪(Y∩Z)∪(Z∩X)","[(X∪Y)∪Z] − [(X△Y)△Z]","(X△Y)∪(Y△Z)∪(Z△X)","Not necessarily any of these"],
+    hint:"Draw a Venn diagram. Exactly-two-of-three means the pairwise intersections minus the triple intersection. Compare with option (b).",
+    ans:"(b) [(X∪Y)∪Z] − [(X△Y)△Z]",
+    sol:"(X△Y)△Z captures elements in exactly 1 or all 3 sets. Universe minus that gives exactly 2 or 0. But restricted to X∪Y∪Z removes 0. Hence option (b) gives exactly-2 region."
+  },
+  {
+    n:30, topic:"sets", tLabel:"Set Theory",
+    q:"s ∈ (P△Q)△R if and only if s is in",
+    opts:["Exactly one of P,Q,R","At least one but not all","Exactly one","Exactly one or all three"],
+    hint:"Use a truth-table over 8 cases (in/out of each set) to check membership in (P△Q)△R.",
+    ans:"(d) Exactly one or all three",
+    sol:"(P△Q)△R is the symmetric difference of P,Q,R. An element is in this set iff it belongs to an odd number (1 or 3) of the sets."
+  },
+  {
+    n:31, topic:"sets", tLabel:"Set Theory",
+    q:"X={1,…,10}, P={1,2,3,4,5}. Number of subsets Q of X with P△Q={3} is",
+    opts:["2⁴−1","2⁴","2⁵","1"],
+    hint:"P△Q={3} means 3 is in exactly one of P,Q and all other elements of P are also in Q.",
+    ans:"(d) 1",
+    sol:"P△Q={3} ⇒ Q contains all of P except 3, and doesn't add 3. So Q={1,2,4,5}. Unique."
+  },
+  {
+    n:32, topic:"sets", tLabel:"Set Theory",
+    q:"Q₁=P₁={1}, Q_{n+1}=P_{n+1}△Qₙ. Number of elements in Q_{2k} is",
+    opts:["1","2k−2","2k−3","k"],
+    hint:"Compute Q₂,Q₃,Q₄,Q₅,Q₆ and observe the pattern for even indices.",
+    ans:"(d) k",
+    sol:"Q₂={2}, Q₄={2,4}, Q₆={2,4,6}, Q₈={2,4,6,8}. Q_{2k} = {2,4,…,2k}, which has k elements."
+  },
+  {
+    n:33, topic:"sets", tLabel:"Set Theory",
+    q:"A∩B∩C=∅, |A△B|=|B△C|=|C△A|=100. Then |A∪B∪C| =",
+    opts:["150","300","230","210"],
+    hint:"|A∪B∪C| = (1/2)(|A△B|+|B△C|+|C△A|) when A∩B∩C=∅.",
+    ans:"(a) 150",
+    sol:"|A∪B∪C| = (1/2)(|A△B|+|B△C|+|C△A|) = (1/2)(300) = 150."
+  },
+  {
+    n:34, topic:"sets", tLabel:"Set Theory",
+    q:"Finite sets A,B,C,D: |A|<|C|, |B|=|D|. Which is always true?",
+    opts:["|A∪B|<|C∪D|","|A∪B|≤|C∪D| but not always strictly less","|A∪B|<2|C∪D| but ≤ not always","None"],
+    hint:"Try specific examples where A⊂B and C,D are disjoint.",
+    ans:"(d) None of the foregoing",
+    sol:"If A⊂B and C,D disjoint: |A∪B|=|B| but |C∪D|=|C|+|D|=|C|+|B|>|B|. Yet if B is large compared to C, options (a)–(c) can fail."
+  },
+  {
+    n:35, topic:"sets", tLabel:"Set Theory",
+    q:"For subsets A,B of X: A*B=(A∩B)∪((X−A)∩(X−B)). Which is true?",
+    opts:["A*(X−B)⊆A*B and A*(X−A)≠A*B","A*B=A*(X−B)","A*B⊆A*(X−B) and they differ","X−(A*B)=A*(X−B)"],
+    hint:"A*B is the set of elements that are either in both A,B or in neither. Check with a Venn diagram.",
+    ans:"(d) X − (A*B) = A*(X−B)",
+    sol:"A*B = elements in A∩B or in (X−A)∩(X−B) — i.e., the 'agreement' set. Its complement in X is the 'disagreement' set = A△B = A*(X−B)."
+  },
+  {
+    n:36, topic:"sets", tLabel:"Set Theory",
+    q:"A,B,C sets with (A−B)△(B−C)=A△B. Which must be true?",
+    opts:["A=C","A∩B=B∩C","A∪B=B∪C","None necessarily"],
+    hint:"Simplify the condition using set identities; check what constraint it imposes on intersections.",
+    ans:"(b) A∩B = B∩C",
+    sol:"Algebraically (A−B)△(B−C)=A△B simplifies to B∩C=A∩B."
+  },
+  {
+    n:37, topic:"logic", tLabel:"Logic & Languages",
+    q:"L₁={αⁿ: n≥0}, L₂={βⁿ: n≥0}. Then L₁·L₂ is",
+    opts:["L₁∪L₂","All words","{ αⁿβᵐ : n,m≥0 }","{ αⁿβⁿ : n≥0 }"],
+    hint:"Concatenate any word from L₁ with any word from L₂.",
+    ans:"(c) { αⁿβᵐ : n,m ≥ 0 }",
+    sol:"Every word in L₁·L₂ is a (possibly empty) string of α's followed by a (possibly empty) string of β's."
+  },
+  {
+    n:38, topic:"logic", tLabel:"Logic & Languages",
+    q:"Language L contains empty word; whenever P∈L, α·P·β∈L. Smallest such L is",
+    opts:["{αⁿβᵐ}","{αⁿβⁿ : n≥0}","{(αβ)ⁿ}","All possible words"],
+    hint:"Start from the empty word and apply the rule repeatedly. What exactly can you build?",
+    ans:"(b) { αⁿβⁿ : n ≥ 0 }",
+    sol:"Empty→αβ→ααββ→…; always equal numbers of α's before β's. This is the smallest closed set."
+  },
+  {
+    n:39, topic:"logic", tLabel:"Logic & Languages",
+    q:"Language L contains empty word, α, β; whenever P,Q∈L, P·Q∈L. Smallest such L is",
+    opts:["All possible words","{αⁿβⁿ}","Words of form (αⁿ¹βⁿ¹)(αⁿ²βⁿ²)…","None of the above"],
+    hint:"Since both α and β are in L, concatenating them freely gives all possible strings of α's and β's.",
+    ans:"(a) All possible words",
+    sol:"α and β are in L; by closure under concatenation, every finite string over {α,β} is in L."
+  },
+  {
+    n:40, topic:"logic", tLabel:"Logic & Languages",
+    q:"Relation: (x,y) ←− (z,w) if x<z, or x=z and y>w. If (x,y)←−(z,w) and (z,w)←−(r,s), which is always true?",
+    opts:["(y,x)←−(r,s)","(y,x)←−(s,r)","(x,y)←−(s,r)","(x,y)←−(r,s)"],
+    hint:"The relation is a lexicographic order. Transitivity applies.",
+    ans:"(d) (x,y) ←− (r,s)",
+    sol:"From the two relations: x≤z≤r and y>w>s, so x≤r and y>s, which means (x,y)←−(r,s)."
+  },
+  {
+    n:41, topic:"analysis", tLabel:"Real Analysis",
+    q:"W is a 'ring' if 1∈W and for a,b∈W: a−b∈W and ab∈W. S={m/2ⁿ | m,n∈ℤ}, T={p/q | p,q∈ℤ, q odd}. Then",
+    opts:["Neither is a ring","S is, T is not","T is, S is not","Both are rings"],
+    hint:"Check closure under subtraction and multiplication for each set, and verify 1 is in each.",
+    ans:"(d) Both S and T are rings",
+    sol:"S: 1=2/2¹∈S; e/2ˣ − f/2ʸ and products stay in S. T: 1=1/1∈T; difference and product of odd-denominator fractions have odd denominators."
+  },
+  {
+    n:42, topic:"analysis", tLabel:"Real Analysis",
+    q:"a⁺=max{a,0}. (ab)⁺ = (a⁺)(b⁺) holds if and only if",
+    opts:["Both a,b > 0","Same sign","a=b=0","At least one of a,b ≥ 0"],
+    hint:"Check cases: both negative, one negative, both non-negative.",
+    ans:"(d) At least one of a, b ≥ 0",
+    sol:"If both are negative: (ab)⁺=ab>0 but (a⁺)(b⁺)=0. Fails. If at least one ≥ 0: (ab)⁺=max(ab,0) and one of a⁺ or b⁺ is 0 or the product equals ab≥0. Equality holds in all such cases."
+  },
+  {
+    n:43, topic:"analysis", tLabel:"Real Analysis",
+    q:"[x]=floor of x, ⟨x⟩=fractional part. For arbitrary reals x,y,z, which is always true?",
+    opts:["[x+y+z]=[x]+[y]+[z]","[x+y+z]=[x+y]+[z]=…","⟨x+y+z⟩=y+z−[y+z]+⟨x⟩","[x+y+z]=[x+y]+[z+⟨y+x⟩]"],
+    hint:"Try x=2.4, y=2.5, z=2.6 to eliminate options. Then verify (d).",
+    ans:"(d) [x+y+z] = [x+y] + [z + ⟨y+x⟩]",
+    sol:"Let f=⟨x+y⟩. Then [x+y+z]=[x+y]+[f+z]=[x+y]+[z+⟨x+y⟩]. Option (d) is the correct identity."
+  },
+  {
+    n:44, topic:"analysis", tLabel:"Real Analysis",
+    q:"x₁,…,xₙ (n>2) real, xᵢ=x_{n−i+1}. S=ΣΣΣxᵢxⱼxₖ (i,j,k distinct). Then S equals",
+    opts:["n!x₁x₂…xₙ","(n−3)(n−4)","(n−3)(n−4)(n−5)","None of the above"],
+    hint:"Expand S using the symmetric sum of x's. Note that P=Σxᵢ=0 when n is even due to the palindrome condition.",
+    ans:"(d) None of the foregoing",
+    sol:"S = P³ − 3PQ + 2Σxᵢ³ where P=Σxᵢ, Q=Σxᵢ². For even n, P=0 and Σxᵢ³=0, so S=0. For odd n, a more complex expression results. Neither matches (a)–(c) in general."
+  },
+  {
+    n:45, topic:"analysis", tLabel:"Real Analysis",
+    q:"sup A=x, sup B=y. C={a+b: a∈A, b∈B}. Then sup C =",
+    opts:["z>x+y","z<x+y","z=x+y","Cannot determine"],
+    hint:"For any ε>0, find a+b within ε of x+y; show x+y is also an upper bound.",
+    ans:"(c) z = x + y",
+    sol:"For any a∈A, b∈B: a≤x, b≤y → a+b≤x+y, so x+y is an upper bound. Given ε>0, ∃a>x−ε/2 and b>y−ε/2, so a+b>x+y−ε. Hence sup C = x+y."
+  },
+  {
+    n:46, topic:"comb", tLabel:"Combinatorics",
+    q:"100 students; 50 fail Maths, 45 fail Physics, 40 fail Stats; 32 fail exactly two subjects; 1 passes all three. Number failing all three is",
+    opts:["12","4","2","Cannot determine"],
+    hint:"Use inclusion-exclusion. Let x₇ = fail all three. Set up equations from the Venn diagram.",
+    ans:"(c) 2",
+    sol:"From Venn equations: (x₁+x₂+x₃)+2(x₄+x₅+x₆)+3x₇=135; (x₁+x₂+x₃)=67−x₇; x₄+x₅+x₆=32. Solving: 2x₇=4 → x₇=2."
+  },
+  {
+    n:47, topic:"comb", tLabel:"Combinatorics",
+    q:"Survey: 60% watch X, 50% watch Y, 50% watch Z; X∩Y=30%, Y∩Z=20%, X∩Z=30%; 10% watch none. % watching all three is",
+    opts:["90","50","10","20"],
+    hint:"Use inclusion-exclusion: total watching ≥ 1 = 90%. Set up equations for x₇ (all three).",
+    ans:"(c) 10%",
+    sol:"With 90% watching at least one: equations yield x₄+x₅+x₆=80%−3x₇ and x₁+x₂+x₃=3x₇. Substituting: x₇=10%."
+  },
+  {
+    n:48, topic:"comb", tLabel:"Combinatorics",
+    q:"100 families; India Today=42, Sunday=30, New Delhi=28; IT∩Sun=10, IT∩ND=5, Sun∩ND=8; all three=3. Families reading none is",
+    opts:["30","26","23","20"],
+    hint:"Use |A∪B∪C| = sum of singles − pairs + triple. Subtract from 100.",
+    ans:"(d) 20",
+    sol:"|A∪B∪C| = 42+30+28 − 10−5−8 + 3 = 80. None = 100−80 = 20."
+  },
+  {
+    n:49, topic:"comb", tLabel:"Combinatorics",
+    q:"(Same survey as Q48.) Families reading either both or none of Sunday and India Today is",
+    opts:["48","38","72","58"],
+    hint:"'Both IT and Sunday' = x₅+x₇ = 10. 'Neither IT nor Sunday' = x₃ + none = ?",
+    ans:"(a) 48",
+    sol:"Both IT and Sunday = 10 (given intersection). Neither = x₃ (only ND) + a (none) = 18+20 = 38. Total = 10+38 = 48."
+  },
+  {
+    n:50, topic:"comb", tLabel:"Combinatorics",
+    q:"Village of 1000; 3 newspapers P,Q,R each read by 500; P∩Q=Q∩R=R∩P=250; all three=250. Persons reading no newspaper is",
+    opts:["500","250","0","Cannot determine"],
+    hint:"If P∩Q=P∩R=Q∩R=250 and P∩Q∩R=250, what does that mean for pairwise overlaps excluding the triple?",
+    ans:"(c) 0",
+    sol:"x₄=x₅=x₆=0 (since pairwise intersections = triple intersection = 250). x₁=x₂=x₃=250. Total = 750+250 = 1000. None = 0."
+  }
+];
+
+/* ─────────────────────────────────────────────
+   TOPIC CONFIG
+───────────────────────────────────────────── */
+const topicClass = {
+  arith:"t-arith", speed:"t-speed", seq:"t-seq", algebra:"t-algebra",
+  numtheo:"t-numtheo", calendar:"t-calendar", sets:"t-sets",
+  logic:"t-logic", analysis:"t-analysis", comb:"t-comb"
+};
+
+/* ─────────────────────────────────────────────
+   RENDER
+───────────────────────────────────────────── */
+const grid = document.getElementById('grid');
+
+Qs.forEach(q => {
+  const tc = topicClass[q.topic] || '';
+  const optHtml = q.opts.map((o,i) => `
+    <div class="opt">
+      <span class="opt-label">(${String.fromCharCode(97+i)})</span>
+      <span>${o}</span>
+    </div>`).join('');
+
+  const card = document.createElement('div');
+  card.className = 'card';
+  card.dataset.topic = q.topic;
+  card.innerHTML = `
+    <div class="card-head">
+      <span class="q-num">${q.n}</span>
+      <span class="q-topic ${tc}">${q.tLabel}</span>
+    </div>
+    <div class="card-body">
+      <div class="q-text">${q.q}</div>
+      <div class="options">${optHtml}</div>
+    </div>
+    <div id="hint-box-${q.n}" class="reveal-box rb-hint">
+      <div class="rb-head">💡 Hint</div>
+      <div class="rb-body">${q.hint}</div>
+    </div>
+    <div id="ans-box-${q.n}" class="reveal-box rb-ans">
+      <div class="rb-head">✓ Answer &amp; Solution</div>
+      <div class="rb-body">
+        <strong class="correct-opt">${q.ans}</strong><br><br>
+        ${q.sol}
+      </div>
+    </div>
+    <div class="card-foot">
+      <button class="btn btn-hint" onclick="toggleBox('hint',${q.n},this)">Show Hint</button>
+      <button class="btn btn-ans"  onclick="toggleBox('ans', ${q.n},this)">Show Answer</button>
+    </div>`;
+  grid.appendChild(card);
+});
+
+/* ─────────────────────────────────────────────
+   TOGGLE BOXES
+───────────────────────────────────────────── */
+function toggleBox(type, n, btn) {
+  const box = document.getElementById(`${type}-box-${n}`);
+  const showing = box.classList.contains('show');
+  box.classList.toggle('show', !showing);
+  if (type === 'hint') {
+    btn.textContent = showing ? 'Show Hint' : 'Hide Hint';
+  } else {
+    btn.textContent = showing ? 'Show Answer' : 'Hide Answer';
+  }
+  btn.classList.toggle('revealed', !showing);
+}
+
+/* ─────────────────────────────────────────────
+   FILTER
+───────────────────────────────────────────── */
+document.getElementById('filterBar').addEventListener('click', e => {
+  const btn = e.target.closest('.filter-btn');
+  if (!btn) return;
+  document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  const topic = btn.dataset.topic;
+  const cards = document.querySelectorAll('.card');
+  let vis = 0;
+  cards.forEach(c => {
+    const hide = topic !== 'all' && c.dataset.topic !== topic;
+    c.dataset.hidden = hide;
+    if (!hide) vis++;
+  });
+  document.getElementById('vis-count').textContent = vis;
+});
+</script>
+</body>
+</html>

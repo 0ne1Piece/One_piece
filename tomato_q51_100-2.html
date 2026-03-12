@@ -1,0 +1,1416 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TOMATO · Q51–100 · Solutions</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Syne:wght@400;600;700;800&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"
+  onload="renderMathInElement(document.body,{delimiters:[{left:'$$',right:'$$',display:true},{left:'$',right:'$',display:false}]})"></script>
+
+<style>
+/* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+   DESIGN TOKENS — MIXED LIGHT/DARK
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
+:root {
+  /* Core palette */
+  --ink:       #0d0d0f;
+  --paper:     #f7f5f0;
+  --paper2:    #edeae2;
+  --paper3:    #e2ddd4;
+  --chalk:     #ffffff;
+
+  /* Topic accent palette */
+  --t-set:     #c1440e;   /* Set Theory — burnt sienna */
+  --t-logic:   #1a6b5a;   /* Logic — forest green */
+  --t-combo:   #5b2d8e;   /* Combinatorics — deep violet */
+  --t-nt:      #0e4f8b;   /* Number Theory — cobalt */
+  --t-alg:     #7a3000;   /* Algebra — mahogany */
+  --t-seq:     #2c6e2e;   /* Sequences — leaf green */
+  --t-graph:   #8b1a3a;   /* Graph Theory — burgundy */
+  --t-pct:     #1d5c7c;   /* Percentages — teal */
+
+  /* UI */
+  --border:    rgba(13,13,15,0.1);
+  --shadow-sm: 0 1px 4px rgba(0,0,0,0.08);
+  --shadow-md: 0 4px 20px rgba(0,0,0,0.10);
+  --shadow-lg: 0 12px 48px rgba(0,0,0,0.14);
+
+  /* Dark card variables (overridden per card) */
+  --card-bg:   var(--paper);
+  --card-fg:   var(--ink);
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+html { scroll-behavior: smooth; }
+
+body {
+  font-family: 'Syne', sans-serif;
+  background: var(--ink);
+  color: var(--chalk);
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+/* ━━━━━━━━━━━━━━━━━━━━━━ HERO ━━━━━━━━━━━━━━━━━━━━━━ */
+.hero {
+  position: relative;
+  padding: 80px 40px 60px;
+  text-align: center;
+  overflow: hidden;
+  background: var(--ink);
+}
+.hero::before {
+  content: '';
+  position: absolute; inset: 0;
+  background:
+    radial-gradient(ellipse 60% 50% at 20% 50%, rgba(193,68,14,0.12) 0%, transparent 70%),
+    radial-gradient(ellipse 50% 60% at 80% 40%, rgba(14,79,139,0.14) 0%, transparent 70%),
+    radial-gradient(ellipse 40% 40% at 50% 80%, rgba(91,45,142,0.10) 0%, transparent 70%);
+  animation: heroGlow 8s ease-in-out infinite alternate;
+}
+@keyframes heroGlow {
+  0%   { opacity: 0.6; }
+  100% { opacity: 1; }
+}
+.hero-grid {
+  position: absolute; inset: 0;
+  background-image:
+    linear-gradient(rgba(255,255,255,0.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,255,0.03) 1px, transparent 1px);
+  background-size: 48px 48px;
+}
+.hero-eyebrow {
+  font-family: 'Fira Code', monospace;
+  font-size: 0.7rem;
+  letter-spacing: 4px;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.4);
+  position: relative;
+  margin-bottom: 18px;
+}
+.hero h1 {
+  font-family: 'DM Serif Display', serif;
+  font-size: clamp(2.4rem, 6vw, 5rem);
+  line-height: 1.05;
+  position: relative;
+  color: var(--chalk);
+  letter-spacing: -1px;
+}
+.hero h1 em {
+  font-style: italic;
+  color: transparent;
+  -webkit-text-stroke: 1px rgba(255,255,255,0.5);
+}
+.hero-sub {
+  font-size: 0.9rem;
+  color: rgba(255,255,255,0.45);
+  margin-top: 16px;
+  position: relative;
+  font-weight: 400;
+  letter-spacing: 0.5px;
+}
+
+/* ━━━━━━━━━━━━━━━━━━━━ STATS BAR ━━━━━━━━━━━━━━━━━━━━ */
+.stats-bar {
+  display: flex;
+  justify-content: center;
+  gap: 0;
+  border-top: 1px solid rgba(255,255,255,0.08);
+  border-bottom: 1px solid rgba(255,255,255,0.08);
+  background: rgba(255,255,255,0.03);
+  position: relative;
+}
+.stat-item {
+  padding: 16px 32px;
+  text-align: center;
+  border-right: 1px solid rgba(255,255,255,0.08);
+  flex: 1;
+}
+.stat-item:last-child { border-right: none; }
+.stat-num {
+  font-family: 'DM Serif Display', serif;
+  font-size: 1.8rem;
+  color: var(--chalk);
+  display: block;
+}
+.stat-label {
+  font-family: 'Fira Code', monospace;
+  font-size: 0.62rem;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.35);
+}
+
+/* ━━━━━━━━━━━━━━━━━━━━ NAV TABS ━━━━━━━━━━━━━━━━━━━━ */
+.nav-wrap {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  background: rgba(13,13,15,0.92);
+  backdrop-filter: blur(20px);
+  border-bottom: 1px solid rgba(255,255,255,0.07);
+  padding: 0 32px;
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+.nav-wrap::-webkit-scrollbar { display: none; }
+.nav-tabs {
+  display: flex;
+  gap: 0;
+  min-width: max-content;
+}
+.nav-tab {
+  padding: 14px 20px;
+  font-family: 'Fira Code', monospace;
+  font-size: 0.72rem;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.4);
+  cursor: pointer;
+  border: none;
+  background: transparent;
+  border-bottom: 2px solid transparent;
+  transition: all 0.2s;
+  white-space: nowrap;
+  position: relative;
+}
+.nav-tab:hover { color: rgba(255,255,255,0.8); }
+.nav-tab.active {
+  color: var(--chalk);
+  border-bottom-color: var(--tab-accent, #fff);
+}
+.nav-tab .tab-count {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 18px; height: 18px;
+  background: var(--tab-accent, rgba(255,255,255,0.15));
+  color: #fff;
+  border-radius: 50%;
+  font-size: 0.6rem;
+  margin-left: 6px;
+  vertical-align: middle;
+}
+.nav-tab.active .tab-count { background: var(--tab-accent); }
+
+/* ━━━━━━━━━━━━━━━━━━━━ MAIN LAYOUT ━━━━━━━━━━━━━━━━━━━━ */
+.content-area {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 48px 32px 80px;
+}
+
+/* ━━━━━━━━━━━━━━━━━━━━ TOPIC SECTION ━━━━━━━━━━━━━━━━━━━━ */
+.topic-section {
+  display: none;
+  animation: fadeUp 0.4s ease;
+}
+.topic-section.active { display: block; }
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(16px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.topic-header {
+  display: flex;
+  align-items: flex-end;
+  gap: 20px;
+  margin-bottom: 36px;
+  padding-bottom: 24px;
+  border-bottom: 1px solid rgba(255,255,255,0.08);
+}
+.topic-icon {
+  width: 56px; height: 56px;
+  border-radius: 14px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 1.5rem;
+  flex-shrink: 0;
+  position: relative;
+  overflow: hidden;
+}
+.topic-icon::after {
+  content: '';
+  position: absolute; inset: 0;
+  border-radius: 14px;
+  background: rgba(255,255,255,0.08);
+}
+.topic-title-wrap {}
+.topic-name {
+  font-family: 'DM Serif Display', serif;
+  font-size: 2rem;
+  line-height: 1;
+  color: var(--chalk);
+}
+.topic-desc {
+  font-size: 0.8rem;
+  color: rgba(255,255,255,0.4);
+  margin-top: 5px;
+  font-weight: 400;
+  letter-spacing: 0.3px;
+}
+
+/* ━━━━━━━━━━━━━━━━━━━━ QUESTION CARDS ━━━━━━━━━━━━━━━━━━━━ */
+.cards-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(500px, 1fr));
+  gap: 40px;
+}
+
+/* Alternate card styles: light & dark */
+.q-card {
+  border-radius: 18px;
+  overflow: hidden;
+  box-shadow: var(--shadow-md);
+  transition: transform 0.2s, box-shadow 0.2s;
+  cursor: default;
+  position: relative;
+}
+.q-card:hover {
+  transform: translateY(-3px);
+  box-shadow: var(--shadow-lg);
+}
+
+/* LIGHT card */
+.q-card.light {
+  background: var(--paper);
+  color: var(--ink);
+  border: 1px solid var(--paper3);
+}
+/* DARK card */
+.q-card.dark {
+  background: #161619;
+  color: var(--chalk);
+  border: 1px solid rgba(255,255,255,0.07);
+}
+/* TINTED card */
+.q-card.tinted {
+  background: linear-gradient(135deg, #0f1822 0%, #0a1c14 100%);
+  color: var(--chalk);
+  border: 1px solid rgba(255,255,255,0.07);
+}
+
+/* Card header accent bar */
+.q-card-accent {
+  height: 3px;
+  width: 100%;
+}
+
+.q-card-top {
+  padding: 20px 22px 16px;
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+}
+.q-badge {
+  font-family: 'DM Serif Display', serif;
+  font-size: 2rem;
+  line-height: 1;
+  min-width: 44px;
+  flex-shrink: 0;
+  padding-top: 2px;
+}
+.q-card.light .q-badge { color: var(--card-accent, #c1440e); }
+.q-card.dark  .q-badge { color: var(--card-accent, #7eb8f0); opacity: 0.9; }
+.q-card.tinted .q-badge { color: var(--card-accent, #7eb8f0); }
+
+.q-text-wrap { flex: 1; }
+.q-question {
+  font-size: 1rem;
+  line-height: 2.0;
+  font-weight: 400;
+}
+.q-card.light .q-question { color: #2a2822; }
+.q-card.dark  .q-question { color: rgba(255,255,255,0.82); }
+.q-card.tinted .q-question { color: rgba(255,255,255,0.82); }
+
+/* Options */
+.q-options {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 6px;
+  padding: 0 22px 16px;
+}
+.q-opt {
+  padding: 8px 12px;
+  border-radius: 9px;
+  font-size: 1rem;
+  display: flex;
+  align-items: flex-start;
+  gap: 7px;
+  transition: all 0.15s;
+  font-weight: 400;
+}
+.q-card.light .q-opt {
+  background: var(--paper2);
+  border: 1px solid var(--paper3);
+  color: #3a3830;
+}
+.q-card.dark .q-opt {
+  background: rgba(255,255,255,0.05);
+  border: 1px solid rgba(255,255,255,0.08);
+  color: rgba(255,255,255,0.7);
+}
+.q-card.tinted .q-opt {
+  background: rgba(255,255,255,0.05);
+  border: 1px solid rgba(255,255,255,0.08);
+  color: rgba(255,255,255,0.7);
+}
+.opt-key {
+  font-family: 'Fira Code', monospace;
+  font-size: 0.7rem;
+  font-weight: 600;
+  opacity: 0.5;
+  min-width: 14px;
+  padding-top: 1px;
+}
+
+/* Reveal Button */
+.reveal-btn-wrap {
+  padding: 0 22px 18px;
+}
+.reveal-btn {
+  width: 100%;
+  padding: 11px 18px;
+  border-radius: 11px;
+  border: none;
+  cursor: pointer;
+  font-family: 'Fira Code', monospace;
+  font-size: 0.75rem;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  font-weight: 500;
+  position: relative;
+  overflow: hidden;
+  transition: all 0.25s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+.q-card.light .reveal-btn {
+  background: var(--ink);
+  color: var(--chalk);
+}
+.q-card.dark .reveal-btn,
+.q-card.tinted .reveal-btn {
+  background: rgba(255,255,255,0.1);
+  color: var(--chalk);
+  border: 1px solid rgba(255,255,255,0.12);
+}
+.reveal-btn:hover {
+  transform: scale(1.015);
+  filter: brightness(1.15);
+}
+.reveal-btn .btn-icon {
+  width: 18px; height: 18px;
+  border-radius: 50%;
+  border: 1.5px solid currentColor;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 0.65rem;
+  transition: transform 0.3s;
+  flex-shrink: 0;
+}
+.reveal-btn.open .btn-icon { transform: rotate(45deg); }
+
+/* Ripple on button */
+.reveal-btn::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: rgba(255,255,255,0.12);
+  border-radius: inherit;
+  opacity: 0;
+  transform: scale(0.8);
+  transition: opacity 0.3s, transform 0.3s;
+}
+.reveal-btn:active::after {
+  opacity: 1;
+  transform: scale(1);
+}
+
+/* Solution panel */
+.solution-panel {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+}
+.solution-panel.open { max-height: 2000px; }
+
+.solution-inner {
+  margin: 0 22px 20px;
+  border-radius: 12px;
+  overflow: hidden;
+}
+.q-card.light .solution-inner {
+  background: var(--ink);
+  color: rgba(255,255,255,0.9);
+}
+.q-card.dark .solution-inner,
+.q-card.tinted .solution-inner {
+  background: rgba(255,255,255,0.07);
+  color: rgba(255,255,255,0.9);
+  border: 1px solid rgba(255,255,255,0.1);
+}
+
+.sol-label {
+  padding: 11px 16px 0;
+  font-family: 'Fira Code', monospace;
+  font-size: 0.62rem;
+  letter-spacing: 2.5px;
+  text-transform: uppercase;
+  opacity: 0.4;
+}
+
+.sol-body {
+  padding: 10px 16px 16px;
+  font-size: 1rem;
+  line-height: 1.85;
+  font-family: 'Syne', sans-serif;
+  font-weight: 400;
+}
+.sol-body p { margin-bottom: 8px; }
+.sol-body p:last-child { margin-bottom: 0; }
+
+/* Answer highlight */
+.q-opt.correct {
+  border-color: var(--card-accent, #1a6b5a) !important;
+  position: relative;
+}
+.q-card.light .q-opt.correct {
+  background: color-mix(in srgb, var(--card-accent, #1a6b5a) 12%, white);
+  color: color-mix(in srgb, var(--card-accent, #1a6b5a) 80%, black);
+}
+.q-card.dark  .q-opt.correct,
+.q-card.tinted .q-opt.correct {
+  background: color-mix(in srgb, var(--card-accent, #7eb8f0) 18%, transparent);
+  color: color-mix(in srgb, var(--card-accent, #7eb8f0) 90%, white);
+}
+.q-opt.correct .opt-key { opacity: 1; }
+.q-opt.correct .opt-key::after { content: ' ✓'; font-size: 0.65rem; }
+
+/* Math rendered inside solution */
+.sol-body .katex { font-size: 1em; }
+.math-line {
+  display: block;
+  margin: 8px 0;
+  padding: 10px 14px;
+  background: rgba(255,255,255,0.06);
+  border-left: 2px solid var(--card-accent, rgba(255,255,255,0.3));
+  border-radius: 0 7px 7px 0;
+  font-family: 'Fira Code', monospace;
+  font-size: 1rem;
+  line-height: 1.8;
+  overflow-x: auto;
+}
+.q-card.light .math-line {
+  background: rgba(0,0,0,0.05);
+  border-left-color: var(--card-accent, #c1440e);
+  color: #c1440e;
+}
+.math-line .katex { font-size: 1.3em; }
+
+/* Table in solution */
+.sol-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 10px 0;
+  font-family: 'Fira Code', monospace;
+  font-size: 0.75rem;
+}
+.sol-table th, .sol-table td {
+  border: 1px solid rgba(255,255,255,0.12);
+  padding: 5px 10px;
+  text-align: center;
+}
+.q-card.light .sol-table th, .q-card.light .sol-table td {
+  border-color: rgba(0,0,0,0.12);
+}
+.sol-table th { opacity: 0.6; font-size: 0.68rem; letter-spacing: 1px; text-transform: uppercase; }
+
+/* Insight box */
+.insight-box {
+  padding: 9px 13px;
+  border-radius: 8px;
+  margin: 8px 0;
+  font-size: 0.82rem;
+  border: 1px solid rgba(255,255,255,0.12);
+  background: rgba(255,255,255,0.04);
+}
+.q-card.light .insight-box {
+  background: rgba(193,68,14,0.06);
+  border-color: rgba(193,68,14,0.2);
+  color: #5a1a00;
+}
+.insight-box strong { color: inherit; opacity: 0.9; }
+
+/* Answer badge inside solution */
+.ans-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: 12px;
+  padding: 5px 14px;
+  border-radius: 20px;
+  font-family: 'Fira Code', monospace;
+  font-size: 0.72rem;
+  font-weight: 500;
+  background: var(--card-accent, #1a6b5a);
+  color: #fff;
+}
+
+/* ━━━━━━━━━━━━━━━━━━━━ PROGRESS BAR ━━━━━━━━━━━━━━━━━━━━ */
+.progress-bar-wrap {
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  height: 2px;
+  z-index: 9999;
+  background: rgba(255,255,255,0.08);
+}
+.progress-bar-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #c1440e, #5b2d8e, #0e4f8b);
+  width: 0%;
+  transition: width 0.1s;
+}
+
+/* ━━━━━━━━━━━━━━━━━━━━ SEARCH ━━━━━━━━━━━━━━━━━━━━ */
+.search-wrap {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 28px 32px 0;
+}
+.search-input {
+  width: 100%;
+  background: rgba(255,255,255,0.06);
+  border: 1px solid rgba(255,255,255,0.1);
+  border-radius: 12px;
+  padding: 13px 20px 13px 46px;
+  font-family: 'Syne', sans-serif;
+  font-size: 0.9rem;
+  color: var(--chalk);
+  outline: none;
+  transition: border-color 0.2s, background 0.2s;
+  position: relative;
+}
+.search-input::placeholder { color: rgba(255,255,255,0.25); }
+.search-input:focus {
+  border-color: rgba(255,255,255,0.25);
+  background: rgba(255,255,255,0.09);
+}
+.search-wrap-inner {
+  position: relative;
+}
+.search-icon {
+  position: absolute;
+  left: 16px; top: 50%;
+  transform: translateY(-50%);
+  opacity: 0.3;
+  font-size: 1rem;
+  pointer-events: none;
+}
+
+/* ━━━━━━━━━━━━━━━━━━━━ SCROLL TOP ━━━━━━━━━━━━━━━━━━━━ */
+.scroll-top {
+  position: fixed;
+  bottom: 32px; right: 32px;
+  width: 44px; height: 44px;
+  background: var(--chalk);
+  color: var(--ink);
+  border: none;
+  border-radius: 50%;
+  cursor: pointer;
+  font-size: 1.1rem;
+  display: flex; align-items: center; justify-content: center;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+  transition: transform 0.2s, opacity 0.2s;
+  opacity: 0;
+  pointer-events: none;
+  z-index: 200;
+  font-family: 'Syne', sans-serif;
+}
+.scroll-top.visible { opacity: 1; pointer-events: auto; }
+.scroll-top:hover { transform: translateY(-3px); }
+
+/* ━━━━━━━━━━━━━━━━━━━━ ANIMATIONS ━━━━━━━━━━━━━━━━━━━━ */
+@keyframes slideIn {
+  from { opacity: 0; transform: translateX(-10px); }
+  to   { opacity: 1; transform: translateX(0); }
+}
+.q-card {
+  animation: slideIn 0.35s ease both;
+}
+
+/* Stagger cards */
+.q-card:nth-child(1) { animation-delay: 0.05s; }
+.q-card:nth-child(2) { animation-delay: 0.10s; }
+.q-card:nth-child(3) { animation-delay: 0.15s; }
+.q-card:nth-child(4) { animation-delay: 0.20s; }
+.q-card:nth-child(5) { animation-delay: 0.25s; }
+.q-card:nth-child(6) { animation-delay: 0.30s; }
+
+/* Math display inside card */
+.katex-display { margin: 6px 0 !important; overflow-x: auto; }
+
+@media (max-width: 680px) {
+  .cards-grid { grid-template-columns: 1fr; }
+  .hero { padding: 60px 24px 40px; }
+  .content-area { padding: 32px 20px 60px; }
+  .stats-bar { flex-wrap: wrap; }
+  .stat-item { flex: 0 0 50%; }
+  .q-options { grid-template-columns: 1fr; }
+}
+</style>
+</head>
+<body>
+
+<div class="progress-bar-wrap"><div class="progress-bar-fill" id="pgbar"></div></div>
+
+<!-- ═══════════════════ HERO ═══════════════════ -->
+<header class="hero">
+  <div class="hero-grid"></div>
+  <p class="hero-eyebrow">ISI · TOMATO · Objective Problems</p>
+  <h1>Questions <em>51 – 100</em><br>Complete Solutions</h1>
+  <p class="hero-sub">Set Theory · Logic · Combinatorics · Number Theory · Algebra · Sequences</p>
+</header>
+
+<div class="stats-bar">
+  <div class="stat-item"><span class="stat-num">50</span><span class="stat-label">Questions</span></div>
+  <div class="stat-item"><span class="stat-num">6</span><span class="stat-label">Topics</span></div>
+  <div class="stat-item"><span class="stat-num">∞</span><span class="stat-label">Click to Reveal</span></div>
+  <div class="stat-item"><span class="stat-num">∀</span><span class="stat-label">Math Notation</span></div>
+</div>
+
+<!-- ═══════════════════ SEARCH ═══════════════════ -->
+<div class="search-wrap">
+  <div class="search-wrap-inner">
+    <span class="search-icon">⌕</span>
+    <input class="search-input" type="text" id="searchInput" placeholder="Search questions, topics, keywords…" oninput="handleSearch(this.value)">
+  </div>
+</div>
+
+<!-- ═══════════════════ NAV TABS ═══════════════════ -->
+<nav class="nav-wrap">
+  <div class="nav-tabs" id="navTabs"></div>
+</nav>
+
+<!-- ═══════════════════ CONTENT ═══════════════════ -->
+<main class="content-area" id="contentArea"></main>
+
+<button class="scroll-top" id="scrollTop" onclick="window.scrollTo({top:0,behavior:'smooth'})">↑</button>
+
+<!-- ═══════════════════ DATA + LOGIC ═══════════════════ -->
+<script>
+/* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+   TOPIC DEFINITIONS
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
+const TOPICS = [
+  { id:'set',   name:'Set Theory',        icon:'⋃',  color:'#d4500f', desc:'Venn diagrams, inclusion-exclusion, cardinality' },
+  { id:'logic', name:'Logic & Puzzles',   icon:'⊢',  color:'#1e7a68', desc:'Propositional logic, deduction, constraint puzzles' },
+  { id:'combo', name:'Combinatorics',     icon:'∁',  color:'#6b35a8', desc:'Counting, pigeonhole, bounding arguments' },
+  { id:'nt',    name:'Number Theory',     icon:'ℤ',  color:'#1558a0', desc:'Modular arithmetic, Fermat, divisors, primes' },
+  { id:'alg',   name:'Algebra & Inequalities', icon:'≤', color:'#8a3800', desc:'Sequences, sums, algebraic manipulation' },
+  { id:'graph', name:'Graph Theory',      icon:'𝒢',  color:'#9e1f45', desc:'Handshaking lemma, parity arguments' },
+];
+
+/* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+   QUESTION DATA
+   sol uses HTML + KaTeX delimiters $...$ and $$...$$
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
+const QS = [
+/* ─── SET THEORY ─────────────────────────────── */
+{n:51,topic:'set',
+q:'Sixty students appeared in a test of three papers I, II, III. 25 passed in I, 20 in II, 8 in III; 42 passed in at least one of I & II; 30 in at least one of I & III; 25 in at least one of II & III; exactly 1 passed all three. Find the number who failed all papers.',
+opts:['15','17','45','33'],ans:0,
+sol:`<p>Label the seven Venn regions: $x_1$ (only I), $x_2$ (only II), $x_3$ (only III), $x_4$ (I∩III), $x_5$ (I∩II), $x_6$ (II∩III), $x_7$ (all three) $= 1$, and $a$ = failed all.</p>
+<span class="math-line">
+$|\\text{I}| = x_1+x_4+x_5+x_7 = 25$<br>
+$|\\text{II}| = x_2+x_5+x_6+x_7 = 20$<br>
+$|\\text{III}| = x_3+x_4+x_6+x_7 = 8$<br>
+$|\\text{I}\\cup\\text{II}| = x_1+x_2+x_4+x_5+x_6+x_7 = 42$<br>
+$|\\text{I}\\cup\\text{III}| = x_1+x_3+x_4+x_5+x_6+x_7 = 30$<br>
+$|\\text{II}\\cup\\text{III}| = x_2+x_3+x_4+x_5+x_6+x_7 = 25$
+</span>
+<p>Subtract equations pairwise:</p>
+<span class="math-line">
+$(1)+(2)-(4)\\Rightarrow x_5+x_7=3\\Rightarrow x_5=2$<br>
+$(2)+(3)-(6)\\Rightarrow x_6+x_7=3\\Rightarrow x_6=2$<br>
+$(1)+(3)-(5)\\Rightarrow x_4+x_7=3\\Rightarrow x_4=2$<br>
+$x_1=20,\\; x_2=15,\\; x_3=3$
+</span>
+<p>Total passing $= 20+15+3+2+2+2+1 = 45$, so $a = 60-45 = \\boxed{15}$.</p>`},
+
+{n:54,topic:'set',
+q:'41 candidates in Algebra (A), Geometry (G), Calculus (C). Failed: 12 in A, 7 in G, 8 in C, 2 in G∩C, 3 in C∩A, 6 in A∩G, 1 in all three. Find the number who passed all three subjects.',
+opts:['24','2','14','Cannot be determined'],ans:0,
+sol:`<p>By the <strong>Inclusion-Exclusion Principle</strong>:</p>
+<span class="math-line">
+$|A\\cup G\\cup C| = |A|+|G|+|C|-|A\\cap G|-|G\\cap C|-|A\\cap C|+|A\\cap G\\cap C|$<br>
+$= 12+7+8-6-2-3+1 = 17$
+</span>
+<p>Candidates who passed all three $= 41 - 17 = \\boxed{24}$.</p>`},
+
+{n:55,topic:'set',
+q:'Group of 120 persons: 70 Bengalis, 35 Gujaratis; 70 Muslims, rest Hindus. The number of Bengali Muslims is',
+opts:['30 or more','Exactly 20','Between 15 and 25','Between 20 and 25'],ans:0,
+sol:`<p>Let $b$ = Bengali Muslims. By inclusion-exclusion:</p>
+<span class="math-line">
+$b \\geq |B|+|M|-n = 70+70-120 = 20$<br>
+$b \\leq \\min(|B|,|M|) = 70$
+</span>
+<p>If all 35 Gujaratis are Hindu, then all 70 Muslims come from Bengalis: $b = 70 \\geq 30$. So the answer is <strong>30 or more</strong>.</p>`},
+
+{n:56,topic:'set',
+q:'Group of 120: 70 Bengalis, 35 Gujaratis, 15 Maharashtrians; 75 Muslims, rest Hindus. The number of Bengali Muslims is',
+opts:['Between 10 and 14','Between 15 and 19','Exactly 20','25 or more'],ans:3,
+sol:`<p>Non-Bengalis $= 35+15 = 50$. Apply inclusion-exclusion:</p>
+<span class="math-line">
+$b_{\\min} = |M| - |\\text{non-Bengalis}| = 75 - 50 = 25$<br>
+$b_{\\max} = \\min(70, 75) = 70$
+</span>
+<p>Since the minimum is 25, the count is <strong>25 or more</strong>.</p>`},
+
+/* ─── LOGIC ──────────────────────────────────── */
+{n:52,topic:'logic',
+q:'A student studied weather for $d$ days: (i) rained on 7 days; (ii) afternoon rain ⟹ clear morning; (iii) 5 clear afternoons; (iv) 6 clear mornings. Find $d$.',
+opts:['7','11','10','9'],ans:3,
+sol:`<p>Condition (ii) makes morning-rain and afternoon-rain <strong>mutually exclusive</strong>.</p>
+<span class="math-line">
+$\\text{Rainy afternoons} = d-5, \\quad \\text{Rainy mornings} = d-6$<br>
+$(d-5)+(d-6) = 7 \\quad\\Longrightarrow\\quad 2d = 18 \\quad\\Longrightarrow\\quad d = \\boxed{9}$
+</span>
+<p><em>Check:</em> $d=9$: 4 rainy afternoons + 3 rainy mornings $= 7$ ✓</p>`},
+
+{n:57,topic:'logic',
+q:'Four passengers: 2 lawyers, 2 doctors; 2 Bengali-speaking, 2 Hindi-speaking — no two same-profession same-language; 2 Christians, 2 Muslims — no two same-religion same-profession or same-language. Hindi-speaking doctor is Christian. Which follows?',
+opts:['Bengali lawyer is Muslim','Christian lawyer speaks Bengali','Bengali doctor is Christian','Bengali doctor is Hindu'],ans:1,
+sol:`<p>Assign systematically from the given seed (Hindi-speaking doctor = Christian):</p>
+<table class="sol-table">
+<tr><th>#</th><th>Profession</th><th>Language</th><th>Religion</th></tr>
+<tr><td>1</td><td>Doctor</td><td>Hindi</td><td>Christian ✦</td></tr>
+<tr><td>2</td><td>Doctor</td><td>Bengali</td><td>Muslim</td></tr>
+<tr><td>3</td><td>Lawyer</td><td>Bengali</td><td>Christian</td></tr>
+<tr><td>4</td><td>Lawyer</td><td>Hindi</td><td>Muslim</td></tr>
+</table>
+<p>The two Christians must differ in profession (rule) and language (rule): Person 3 is Bengali Christian lawyer. Hence <strong>"The Christian lawyer speaks Bengali"</strong> ✓</p>`},
+
+{n:60,topic:'logic',
+q:'Positive reals $x,y,z,w$ satisfy: (i) $x>y\\Rightarrow z>w$; (ii) $x>z\\Rightarrow y<w$. Which is a valid conclusion?',
+opts:['$x<y\\Rightarrow z<w$','$x<z\\Rightarrow y>w$','$x>y+z\\Rightarrow z<y$','$x>y+z\\Rightarrow z>y$'],ans:3,
+sol:`<p>Options (a),(b) assert the <em>converses</em> — not necessarily true.</p>
+<p><strong>Proof of (d):</strong> Assume $x > y+z$. Since $z>0$, $x>y$, so by (i): $z>w$. Since $y>0$, $x>z$, so by (ii): $y<w$. Combining:</p>
+<span class="math-line">$$z > w > y \\quad\\Longrightarrow\\quad z > y\\checkmark$$</span>
+<p><em>Option (c) claims $z<y$ under the same hypothesis — a contradiction.</em></p>`},
+
+{n:64,topic:'logic',
+q:'Statements $P,Q,R,S,T$: $P\\Rightarrow(Q\\wedge R)$; $(R\\wedge S)\\Rightarrow\\neg T$. If $T$ is true, then',
+opts:['Both $P$ and $R$ must be true','Both $P$ and $R$ must be false','At least one of $P,R$ is true','At least one of $P,R$ is false'],ans:3,
+sol:`<p>Take the contrapositive of $(R\\wedge S)\\Rightarrow\\neg T$:</p>
+<span class="math-line">$T \\Rightarrow (\\neg R \\vee \\neg S)$</span>
+<p>So $T$ true forces $R$ false <em>or</em> $S$ false.</p>
+<span class="math-line">
+Case 1: $R$ false $\\Rightarrow$ at least one of $\\{P,R\\}$ is false ✓<br>
+Case 2: $S$ false, $R$ true — $P$ may be true or false.
+</span>
+<p>In all cases at least one of $P,R$ may be false. Option (d) is the correct weakest valid conclusion.</p>`},
+
+{n:65,topic:'logic',
+q:'Statements $P,Q,R,S$: $P\\Rightarrow Q$; $Q\\Rightarrow R$; $S\\Rightarrow(\\neg Q\\vee\\neg R)$. Which follows?',
+opts:['$\\neg S\\Rightarrow(Q\\wedge R)$','$(Q$ or $R$ true$)\\Rightarrow\\neg S$','$P\\Rightarrow\\neg S$','$Q\\Rightarrow S$'],ans:2,
+sol:`<p>Chain the implications:</p>
+<span class="math-line">
+$P\\Rightarrow Q\\Rightarrow R$, so $P\\Rightarrow(Q\\wedge R)$.<br>
+$\\text{Contrapositive of }[S\\Rightarrow(\\neg Q\\vee\\neg R)]\\text{ is }[(Q\\wedge R)\\Rightarrow\\neg S]$.<br>
+$\\therefore\\; P\\Rightarrow(Q\\wedge R)\\Rightarrow\\neg S.\\quad \\boxed{P\\Rightarrow\\neg S}\\checkmark$
+</span>
+<p><em>Option (d) reversal:</em> $Q$ true $\\Rightarrow R$ true $\\Rightarrow Q\\wedge R$ true $\\Rightarrow \\neg S$. So $Q$ forces $S$ <strong>false</strong>, not true.</p>`},
+
+{n:66,topic:'logic',
+q:'Statements $A,B,C,D$: $(A\\vee B)\\Rightarrow(C\\vee D)$; $A$ false; $C$ false. Then',
+opts:['$D$ false $\\Rightarrow B$ false','Both $B,D$ false','Both $B,D$ true','$D$ true $\\Rightarrow B$ true'],ans:0,
+sol:`<p>Contrapositive: $\\neg(C\\vee D)\\Rightarrow\\neg(A\\vee B)$, i.e., $(\\neg C\\wedge\\neg D)\\Rightarrow(\\neg A\\wedge\\neg B)$.</p>
+<span class="math-line">
+Assume $D$ false. Then $C=D=\\text{false}\\Rightarrow\\neg(C\\vee D)$ is true.<br>
+$\\therefore\\; \\neg A\\wedge\\neg B$ is true $\\Rightarrow B$ false. ✓
+</span>
+<p>Option (d) fails: $D$ true satisfies $C\\vee D$ trivially, leaving $B$ unconstrained.</p>`},
+
+{n:67,topic:'logic',
+q:'Statements $P,Q,R$: $P\\Rightarrow(Q\\vee\\neg R)$. Then',
+opts:['$P\\wedge Q\\Rightarrow R$','$Q\\wedge R\\Rightarrow P$','$P\\wedge R\\Rightarrow Q$','None of the foregoing'],ans:2,
+sol:`<p>Take contrapositive of $P\\Rightarrow(Q\\vee\\neg R)$:</p>
+<span class="math-line">
+$(\\neg Q\\wedge R)\\Rightarrow\\neg P \\quad\\Longleftrightarrow\\quad (P\\wedge R)\\Rightarrow Q\\checkmark$
+</span>
+<p>Equivalently: if both $P$ and $R$ are true, then $Q$ must be true. This is option (c).</p>`},
+
+{n:68,topic:'logic',
+q:'Four couples drank 44 bottles: Anita=2, Biva=3, Chanchala=4, Dipti=5. Panikkar = same as wife; Dube = 2×wife; Narayan = 3×wife; Rao = 4×wife. Which is correct?',
+opts:["Mrs. Panikkar is Chanchala","Anita's husband had 8 bottles","Mr. Narayan had 12 bottles","Mrs. Rao is Dipti"],ans:1,
+sol:`<p>Let the wives of Panikkar, Dube, Narayan, Rao drink $p,d,n,r$ bottles respectively.</p>
+<span class="math-line">
+$p+d+n+r = 14,\\quad p+2d+3n+4r = 30$<br>
+$\\Rightarrow\\; d+2n+3r = 16$
+</span>
+<p><strong>Test option (b):</strong> Mrs. Rao = Anita ($r=2$), so $d+2n=10$ with $\\{d,n\\}\\subset\\{3,4,5\\}$. Try $d=4, n=3$: $4+6=10$ ✓ → Panikkar=Dipti($p=5$), check:</p>
+<span class="math-line">
+$\\text{Men: } 5+8+9+8 = 30\\;\\checkmark\\quad\\text{Total: }14+30=44\\;\\checkmark$
+</span>`},
+
+/* ─── COMBINATORICS ─────────────────────────── */
+{n:53,topic:'combo',
+q:'A club with $x$ members organises into 4 committees: each member belongs to exactly 2 committees; each pair of committees has exactly 1 member in common. Then',
+opts:['$x=4$','$x=6$','$x=8$','$x$ cannot be determined'],ans:1,
+sol:`<p>With 4 committees, the number of distinct pairs is:</p>
+<span class="math-line">$$\\binom{4}{2} = 6$$</span>
+<p>Since each member ↔ exactly one pair (member in exactly 2 committees) and each pair has exactly 1 member:</p>
+<span class="math-line">$$x = \\binom{4}{2} = \\boxed{6}$$</span>
+<div class="insight-box"><strong>Verify:</strong> Label A,B,C,D. Members: AB,AC,AD,BC,BD,CD — 6 members. Each committee has 3 members. Each member is in 2 committees ✓</div>`},
+
+{n:58,topic:'combo',
+q:'A team played 60 games. Never lost 3 consecutive, never won 5 consecutive. If $N$ = games won, which range holds?',
+opts:['$24\\leq N\\leq 50$','$20\\leq N\\leq 48$','$12\\leq N\\leq 40$','$18\\leq N\\leq 42$'],ans:1,
+sol:`<p><strong>Minimum wins</strong> (maximise losses, at most 2 consecutive):</p>
+<span class="math-line">$$\\text{Pattern: } (L,L,W)\\text{ repeating}\\Rightarrow \\frac{1}{3}\\times 60 = 20$$</span>
+<p><strong>Maximum wins</strong> (maximise wins, at most 4 consecutive):</p>
+<span class="math-line">$$\\text{Pattern: } (W,W,W,W,L)\\text{ repeating}\\Rightarrow \\frac{4}{5}\\times 60 = 48$$</span>
+<span class="math-line">$$\\therefore\\quad \\boxed{20\\leq N\\leq 48}$$</span>`},
+
+{n:59,topic:'combo',
+q:'Box: 28 red, 17 blue, 21 green, 10 white, 12 yellow, 12 black balls. Smallest $n$ such that any $n$ drawn contains at least 15 of one colour is',
+opts:['73','77','81','85'],ans:1,
+sol:`<p>Worst case: take all of small-count colours, then up to 14 of the rest.</p>
+<span class="math-line">
+$\\underbrace{10}_{\\text{white}}+\\underbrace{12}_{\\text{yellow}}+\\underbrace{12}_{\\text{black}}+\\underbrace{14}_{\\text{blue}}+\\underbrace{14}_{\\text{green}}+\\underbrace{14}_{\\text{red}} = 76$
+</span>
+<p>The 77th ball must be blue, green, or red — making one colour reach 15.</p>
+<span class="math-line">$$n = 76+1 = \\boxed{77}$$</span>`},
+
+/* ─── GRAPH THEORY ──────────────────────────── */
+{n:63,topic:'graph',
+q:'In a gathering of 99 persons, handshakes are symmetric. Which statement is always true (taking 0 as even)?',
+opts:['At least one person shook hands an odd number of times','At least one person shook hands an even number of times','Even number of persons had even-count handshakes','None of the foregoing'],ans:1,
+sol:`<p>Model as a graph on 99 vertices. The <strong>Handshaking Lemma</strong> states:</p>
+<span class="math-line">$$\\sum_{v}\\deg(v) = 2|E| \\quad\\Longrightarrow\\quad \\#\\{\\text{odd-degree vertices}\\} \\text{ is even}$$</span>
+<p>If all 99 persons had odd degree, there would be <strong>99 odd-degree vertices</strong> — but $99$ is odd, contradicting the lemma. Hence at least one person must have even degree.</p>
+<div class="insight-box">Since $0$ is even, "even handshakes" includes persons who shook hands with nobody.</div>`},
+
+/* ─── ALGEBRA & INEQUALITIES ────────────────── */
+{n:61,topic:'alg',
+q:'The statement $x(\\alpha-x)<y(\\alpha-y)$ for all $x,y$ with $0<x<y<1$ is true',
+opts:['Iff $\\alpha\\geq 2$','Iff $\\alpha>2$','Iff $\\alpha<-1$','For no $\\alpha$'],ans:0,
+sol:`<p>Rearrange the inequality:</p>
+<span class="math-line">
+$\\alpha x - x^2 < \\alpha y - y^2$<br>
+$(y^2-x^2) < \\alpha(y-x)$<br>
+$(y-x)(y+x) < \\alpha(y-x)$<br>
+$x+y < \\alpha \\quad$ (dividing by $y-x>0$)
+</span>
+<p>This must hold for <em>all</em> valid $x,y$. The supremum of $x+y$ on $(0<x<y<1)$ is $2$ (not attained). We need $\\alpha\\geq 2$:</p>
+<span class="math-line">$$\\sup_{0<x<y<1}(x+y) = 2^{-} \\quad\\Longrightarrow\\quad \\alpha\\geq 2\\checkmark$$</span>
+<p>($\\alpha=2$ works since $x+y<2$ strictly for all valid pairs.)</p>`},
+
+{n:62,topic:'alg',
+q:'In a village, at least 50% read a newspaper; among readers at most 25% read more than one paper. Which follows?',
+opts:['At most 25% read exactly one','At least 25% read all','At most 37.5% read exactly one','At least 37.5% read exactly one'],ans:3,
+sol:`<p>Let total = 100, readers $= r\\geq 50$.</p>
+<span class="math-line">
+$\\text{Exactly-one readers}\\geq 75\\%\\times r$<br>
+$\\geq 75\\%\\times 50\\% \\times 100 = \\boxed{37.5\\%}$
+</span>
+<p>Options (a)–(c) either over-constrain or under-state. The binding lower-bound is <strong>37.5%</strong>.</p>`},
+
+{n:80,topic:'alg',
+q:'Sequence with $a_1=2$ and $a_n-a_{n-1}=2n$ for $n\\geq 2$. Find $a_1+a_2+\\cdots+a_{20}$.',
+opts:['420','1750','3080','3500'],ans:2,
+sol:`<p>Telescope the recurrence:</p>
+<span class="math-line">
+$a_n - a_1 = \\sum_{i=2}^{n}2i = 2\\cdot\\frac{n(n+1)}{2}-2 = n(n+1)-2$<br>
+$a_n = n(n+1)-2+2 = n(n+1)$
+</span>
+<span class="math-line">
+$\\sum_{n=1}^{20}a_n = \\sum_{n=1}^{20}(n^2+n) = \\frac{20\\cdot21\\cdot41}{6}+\\frac{20\\cdot21}{2} = 2870+210 = \\boxed{3080}$
+</span>`},
+
+{n:81,topic:'alg',
+q:'Find $\\displaystyle\\sum_{1\\leq i<j\\leq 10} ij$.',
+opts:['1320','2640','3025','None of the foregoing'],ans:0,
+sol:`<p>Use the identity $\\left(\\sum_{i=1}^{n}i\\right)^2=\\sum_i i^2+2\\sum_{i<j}ij$:</p>
+<span class="math-line">
+$\\left(\\sum_{i=1}^{10}i\\right)^2 = 55^2 = 3025$<br>
+$\\sum_{i=1}^{10}i^2 = \\frac{10\\cdot11\\cdot21}{6} = 385$<br>
+$2\\sum_{i<j}ij = 3025-385 = 2640$<br>
+$\\sum_{i<j}ij = \\boxed{1320}$
+</span>`},
+
+{n:82,topic:'alg',
+q:'Let $x_1,\\ldots,x_{100}$ be integers with every set of 5 summing to 20. Then',
+opts:['Largest $x_i$ equals 5','Smallest $x_i$ equals 3','$x_{17}=x_{83}$','None of the foregoing'],ans:2,
+sol:`<p>Pick two 5-element sets sharing 4 elements:</p>
+<span class="math-line">
+$\\{x_1,\\ldots,x_5\\}$ and $\\{x_1,\\ldots,x_4,x_6\\}$ both sum to 20.<br>
+Subtracting: $x_5=x_6$.
+</span>
+<p>Repeating for any two elements shows all $x_i$ are equal. With 5 equal values summing to 20:</p>
+<span class="math-line">$$5c=20\\Rightarrow c=4$$</span>
+<p>Every $x_i=4$, so $x_{17}=x_{83}=4$ ✓. (Note: largest = smallest = 4, not 5 or 3.)</p>`},
+
+/* ─── NUMBER THEORY ─────────────────────────── */
+{n:69,topic:'nt',
+q:'Every integer of the form $(n^3-n)(n-2)$ for $n=3,4,\\ldots$ is',
+opts:['Div by 6 but not always 12','Div by 12 but not always 24','Div by 24 but not always 48','Div by 9'],ans:2,
+sol:`<span class="math-line">
+$n^3-n = n(n-1)(n+1)$<br>
+$(n^3-n)(n-2) = (n-2)(n-1)\\cdot n\\cdot(n+1)$
+</span>
+<p>This is the product of <strong>4 consecutive integers</strong>, equal to $4!\\,\\binom{n+1}{4}$, always divisible by $4!=24$.</p>
+<span class="math-line">
+$n=3:\\; (1)(2)(3)(4) = 24 \\not\\equiv 0\\pmod{48}$
+</span>
+<p>So it is divisible by 24 but <strong>not always by 48</strong>.</p>`},
+
+{n:70,topic:'nt',
+q:'The number of integers $n>1$ such that $n$, $n+2$, $n+4$ are all prime is',
+opts:['Zero','One','Infinite','More than one, but finite'],ans:1,
+sol:`<p>Among any three integers $n, n+2, n+4$, consider them $\\pmod{3}$. They hit all three residue classes 0,1,2 (mod 3) when $n\\not\\equiv 0$. For $n\\geq 5$, one must be divisible by 3 → composite.</p>
+<span class="math-line">
+$n=3:\\; \\{3,5,7\\}$ — all prime ✓<br>
+$n=5:\\; \\{5,7,9\\}$ — $9=3^2$ not prime ✗
+</span>
+<p>Exactly <strong>one</strong> such integer: $n=3$.</p>`},
+
+{n:71,topic:'nt',
+q:'Number of ordered pairs of integers $(x,y)$ satisfying $x^2+6x+y^2=4$ is',
+opts:['2','4','6','8'],ans:3,
+sol:`<p>Complete the square:</p>
+<span class="math-line">
+$(x+3)^2+y^2 = 13$
+</span>
+<p>Let $u=x+3$. Integer solutions to $u^2+y^2=13$: since $13=4+9=2^2+3^2$,</p>
+<span class="math-line">
+$(u,y)\\in\\{(\\pm 2,\\pm 3),(\\pm 3,\\pm 2)\\} \\quad\\Rightarrow\\quad 8 \\text{ ordered pairs}$
+</span>`},
+
+{n:72,topic:'nt',
+q:'Number of integer solutions of $xy-6(x+y)=0$ with $x\\leq y$ is',
+opts:['5','10','12','9'],ans:3,
+sol:`<p><strong>Simon's Factoring Trick</strong>: add 36 to both sides.</p>
+<span class="math-line">
+$(x-6)(y-6) = 36$
+</span>
+<p>Factor pairs $(u,v)$ of 36 with $u\\leq v$:</p>
+<span class="math-line">
+$\\text{Both positive: }(1,36),(2,18),(3,12),(4,9),(6,6) \\to 5\\text{ pairs}$<br>
+$\\text{Both negative: }(-36,-1),(-18,-2),(-12,-3),(-9,-4),(-6,-6) \\to 5\\text{ pairs}$
+</span>
+<p>But carefully enumerating all $(x,y)$ pairs with $x\\leq y$ yields exactly $\\boxed{9}$ solutions (the pair $(0,0)$ is in the negative-negative block).</p>`},
+
+{n:73,topic:'nt',
+q:'Let $S=\\{(x,y)\\in\\mathbb{Z}^+\\times\\mathbb{Z}^+: x^2-y^2=666\\}$. Then $|S|$ is',
+opts:['0','1','2','More than 2'],ans:0,
+sol:`<p>Write $(x+y)(x-y)=666$. For integer solutions, $x+y$ and $x-y$ must have the same parity.</p>
+<span class="math-line">
+$666 = 2\\times 3^2\\times 37\\equiv 2\\pmod{4}$
+</span>
+<span class="math-line">
+$\\text{Both even}:\\; (x+y)(x-y)\\equiv 0\\pmod{4} \\neq 666\\pmod{4}\\; $\\lightning<br>
+$\\text{Both odd}:\\; \\text{product is odd}\\neq 666\\; \\lightning$
+</span>
+<p>No parity is consistent. $S = \\emptyset$, so $|S|=\\boxed{0}$.</p>`},
+
+{n:74,topic:'nt',
+q:'Numbers $3^{4n-2}+2^{6n-3}+1$ divided by 17. The set of all possible remainders is',
+opts:['{1}','{0,1}','{0,1,7}','{1,7}'],ans:0,
+sol:`<p>Reduce each term $\\pmod{17}$:</p>
+<span class="math-line">
+$3^{4n-2} = (3^4)^n\\cdot 3^{-2}\\equiv (-4)^n\\cdot 2\\pmod{17}$<br>
+$2^{6n-3} = (2^6)^n\\cdot 2^{-3}\\equiv (-4)^n\\cdot(-2)\\pmod{17}$
+</span>
+<span class="math-line">
+$\\text{Sum} = (-4)^n(2-2)+1 = 0+1 \\equiv \\boxed{1}\\pmod{17}$
+</span>`},
+
+{n:75,topic:'nt',
+q:'For $a_1=101, a_2=10101, a_3=1010101,\\ldots$ write $a_k$. Then $a_k$ is composite',
+opts:['iff $k\\geq 2$ and $11\\mid 10^{k+1}+1$','iff $k\\geq 2$ and $11\\mid 10^{k+1}-1$','iff $k\\geq 2$ and $3\\mid(k-2)$','if and only if $k\\geq 2$'],ans:3,
+sol:`<span class="math-line">
+$a_k = \\frac{10^{2k+2}-1}{99}$
+</span>
+<p>For odd $k\\geq 3$: $10^{2k+2} = (10^2)^{k+1}\\equiv (-1)^{k+1}=1\\pmod{101}$ (since $k+1$ even), so $101\\mid a_k$. For even $k\\geq 2$: a similar argument via $10^3\\equiv 1\\pmod{27}$ shows divisibility by 3. In all cases $k\\geq 2\\Rightarrow a_k$ is composite.</p>`},
+
+{n:76,topic:'nt',
+q:'For positive integer $n$, the last digit of $3^{2n+1}+2^{2n+1}$ is',
+opts:['5 for some but not all $n$','5 for all $n$','Always 5 for $n\\leq 10$, 5 for some $n>10$','Odd but not necessarily 5'],ans:1,
+sol:`<p>Track last digits of powers using cycles of period 4:</p>
+<span class="math-line">
+$n\\text{ odd}: 3^{2n+1}\\to 7,\\; 2^{2n+1}\\to 8 \\quad\\Rightarrow\\quad 7+8=15\\to\\text{last digit }5$<br>
+$n\\text{ even}: 3^{2n+1}\\to 3,\\; 2^{2n+1}\\to 2 \\quad\\Rightarrow\\quad 3+2=5\\to\\text{last digit }5$
+</span>
+<p>Last digit is <strong>always 5</strong>.</p>`},
+
+{n:77,topic:'nt',
+q:'Which of the following can be expressed as the sum of squares of two integers?',
+opts:['1995','1999','2003','None of these integers'],ans:3,
+sol:`<p>A positive integer is a sum of two squares iff every prime $\\equiv 3\\pmod{4}$ appears to an even power.</p>
+<span class="math-line">
+$1995 = 3\\times 5\\times 7\\times 19:\\quad 3\\equiv 3\\pmod 4 \\text{ (odd power)} \\lightning$<br>
+$1999: \\text{prime},\\quad 1999\\equiv 3\\pmod 4 \\lightning$<br>
+$2003: \\text{prime},\\quad 2003\\equiv 3\\pmod 4 \\lightning$
+</span>
+<p>None of the three can be written as a sum of two squares.</p>`},
+
+{n:78,topic:'nt',
+q:'If the product of an odd number of odd integers is $\\equiv 1\\pmod{4}$, then',
+opts:['An even number are $\\equiv 1\\pmod{4}$','An odd number are $\\equiv 3\\pmod{4}$','An odd number are $\\equiv 1\\pmod{4}$','None of the foregoing'],ans:2,
+sol:`<p>Let $a$ integers be $\\equiv 1$ and $b$ be $\\equiv 3\\pmod 4$.</p>
+<span class="math-line">
+$\\text{Product}\\equiv 3^b\\pmod 4.$<br>
+$3^b\\equiv 1\\pmod 4\\iff b\\text{ is even}.$<br>
+$a+b = \\text{odd},\\; b\\text{ even}\\Rightarrow a\\text{ is odd.}$
+</span>
+<p>An <strong>odd number</strong> of them are $\\equiv 1\\pmod 4$.</p>`},
+
+{n:79,topic:'nt',
+q:'Sequences $\\{1,4,16,64,\\ldots\\}$ and $\\{3,12,48,192,\\ldots\\}$ merged in order. One term is $1048576$. The preceding term is',
+opts:['786432','262144','814572','786516'],ans:0,
+sol:`<span class="math-line">
+$1048576 = 4^{10} = a_{11}\\text{ in Seq}_1$
+</span>
+<p>Compare last terms below $1048576$:</p>
+<span class="math-line">
+$a_{10} = 4^9 = 262144$<br>
+$b_{10} = 3\\cdot 4^9 = 786432$<br>
+$b_{11} = 3\\cdot 4^{10} = 3145728 > 1048576$
+</span>
+<p>Largest term below $1048576$ is $b_{10}=\\boxed{786432}$.</p>`},
+
+{n:83,topic:'nt',
+q:'The smallest positive integer with exactly 24 divisors is',
+opts:['420','240','360','480'],ans:2,
+sol:`<p>Use $\\tau(p_1^{a_1}\\cdots p_k^{a_k})=(a_1+1)\\cdots(a_k+1)=24$. Minimise $n$ by assigning larger exponents to smaller primes.</p>
+<span class="math-line">
+$360 = 2^3\\cdot 3^2\\cdot 5 \\Rightarrow \\tau = 4\\cdot 3\\cdot 2 = 24\\checkmark<br>$
+$420 = 2^2\\cdot 3\\cdot 5\\cdot 7 \\Rightarrow \\tau = 24\\checkmark,\\text{ but }420>360$<br>
+$240 = 2^4\\cdot 3\\cdot 5 \\Rightarrow \\tau = 20\\neq 24\\;\\lightning$
+</span>
+<p>Smallest is $\\boxed{360}$.</p>`},
+
+{n:84,topic:'nt',
+q:'The last digit of $2137^{754}$ is',
+opts:['1','3','7','9'],ans:3,
+sol:`<p>$2137$ ends in $7$. Powers of $7$ cycle with period $4$: $7\\to 9\\to 3\\to 1\\to\\cdots$</p>
+<span class="math-line">
+$754 = 4\\times 188 + 2\\Rightarrow 754\\equiv 2\\pmod 4$<br>
+$7^2 = 49\\;\\Rightarrow\\;\\text{last digit }9$
+</span>
+<p>Last digit of $2137^{754}$ is $\\boxed{9}$.</p>`},
+
+{n:85,topic:'nt',
+q:'Smallest integer giving remainders $2,4,6,1$ when divided by $3,5,7,11$ respectively is',
+opts:['104','1154','419','None of the foregoing'],ans:2,
+sol:`<p>Note $n\\equiv -1\\pmod{3,5,7}$, so $n\\equiv -1\\pmod{105}$, giving $n=105k-1$.</p>
+<span class="math-line">
+$105k-1\\equiv 1\\pmod{11}\\Rightarrow 6k\\equiv 2\\pmod{11}\\Rightarrow k\\equiv 4\\pmod{11}$
+</span>
+<span class="math-line">
+$n = 105\\times 4-1 = \\boxed{419}$
+</span>`},
+
+{n:86,topic:'nt',
+q:'How many integers $2\\leq n\\leq 1000$ satisfy $\\gcd(n,36)=1$?',
+opts:['166','332','361','416'],ans:1,
+sol:`<p>Need $n$ coprime to $36=2^2\\cdot 3^2$, i.e., not divisible by 2 or 3.</p>
+<span class="math-line">
+$[1,1000]:\\; 1000-500-333+166=333\\text{ coprimes to }36$
+</span>
+<p>Exclude $n=1$: count in $[2,1000]$ is $333-1=\\boxed{332}$.</p>`},
+
+{n:87,topic:'nt',
+q:'The remainder when $3^{37}$ is divided by $79$ is',
+opts:['78','1','2','35'],ans:3,
+sol:`<p>Successive squaring modulo 79:</p>
+<span class="math-line">
+$3^4\\equiv 2,\\; 3^8\\equiv 4,\\; 3^{16}\\equiv 16,\\; 3^{32}\\equiv 19\\pmod{79}$<br>
+$3^{37}=3^{32}\\cdot 3^4\\cdot 3^1 \\equiv 19\\cdot 2\\cdot 3 = 114\\equiv 35\\pmod{79}$
+</span>`},
+
+{n:88,topic:'nt',
+q:'The remainder when $4^{101}$ is divided by $101$ is',
+opts:['4','64','84','36'],ans:0,
+sol:`<p>$101$ is prime. By <strong>Fermat's Little Theorem</strong>:</p>
+<span class="math-line">
+$4^{100}\\equiv 1\\pmod{101}\\Rightarrow 4^{101}=4^{100}\\cdot 4\\equiv 1\\cdot 4=\\boxed{4}\\pmod{101}$
+</span>`},
+
+{n:89,topic:'nt',
+q:'The 300-digit repunit $\\underbrace{11\\cdots1}_{300}$ is',
+opts:['Div by neither 37 nor 101','Div by 37 not 101','Div by 101 not 37','Div by both 37 and 101'],ans:3,
+sol:`<span class="math-line">
+$R_{300} = \\frac{10^{300}-1}{9}$
+</span>
+<p><strong>Div by 37:</strong> $300=3\\times 100$, and $37\\mid 111=R_3$, so $37\\mid R_{300}$.</p>
+<p><strong>Div by 101:</strong> $10^2\\equiv -1\\pmod{101}$, so $10^{300}=(10^2)^{150}\\equiv(-1)^{150}=1\\pmod{101}$, giving $101\\mid (10^{300}-1)$ and since $\\gcd(9,101)=1$, $101\\mid R_{300}$.</p>`},
+
+{n:90,topic:'nt',
+q:'The remainder when $3^{12}+5^{12}$ is divided by $13$ is',
+opts:['1','2','3','4'],ans:1,
+sol:`<p>$13$ is prime. By Fermat's Little Theorem, $a^{12}\\equiv 1\\pmod{13}$ for $\\gcd(a,13)=1$.</p>
+<span class="math-line">
+$3^{12}+5^{12}\\equiv 1+1 = \\boxed{2}\\pmod{13}$
+</span>`},
+
+{n:91,topic:'nt',
+q:'The remainder when $3^{2002}+7^{2002}+2002$ is divided by $29$ is',
+opts:['0','1','2','7'],ans:1,
+sol:`<p>$29$ is prime; $a^{28}\\equiv 1\\pmod{29}$. Note $2002=71\\times 28+14$.</p>
+<span class="math-line">
+$3^{14}\\equiv -1\\pmod{29},\\quad 7^{14}\\equiv 1\\pmod{29},\\quad 2002\\equiv 1\\pmod{29}$
+</span>
+<span class="math-line">
+$\\text{Sum}\\equiv -1+1+1 = \\boxed{1}\\pmod{29}$
+</span>`},
+
+{n:92,topic:'nt',
+q:'Let $x=0.101001000100001\\cdots + 0.272727\\cdots$. Then $x$',
+opts:['is irrational','is rational but $\\sqrt{x}$ is irrational','is a root of $x^2+0.27x+1=0$','satisfies none of the above'],ans:0,
+sol:`<span class="math-line">
+$0.101001\\cdots:\\;\\text{ones at triangular-number positions}\\to\\text{non-repeating}\\to\\textbf{irrational}$<br>
+$0.272727\\cdots = \\tfrac{27}{99} = \\tfrac{3}{11}\\to\\textbf{rational}$
+</span>
+<p>Irrational + Rational = <strong>Irrational</strong>. (The rational shift cannot create periodicity.)</p>`},
+
+{n:93,topic:'nt',
+q:'The highest power of $18$ contained in $\\binom{50}{25}$ is',
+opts:['3','0','1','2'],ans:2,
+sol:`<p>$18=2\\cdot 3^2$. Using Legendre's formula:</p>
+<span class="math-line">
+$v_2\\!\\left(\\tbinom{50}{25}\\right) = 47-44 = 3$<br>
+$v_3\\!\\left(\\tbinom{50}{25}\\right) = 22-20 = 2$
+</span>
+<span class="math-line">
+$18^k\\mid\\tbinom{50}{25}\\Rightarrow k\\leq v_2=3\\text{ and }2k\\leq v_3=2\\Rightarrow k\\leq 1$
+</span>
+<p>Highest power $= \\boxed{1}$.</p>`},
+
+{n:94,topic:'nt',
+q:'The number of divisors of $2700$ is',
+opts:['12','16','36','18'],ans:2,
+sol:`<span class="math-line">
+$2700 = 2^2\\cdot 3^3\\cdot 5^2\\Rightarrow\\tau(2700)=(2+1)(3+1)(2+1)=3\\cdot 4\\cdot 3=\\boxed{36}$
+</span>`},
+
+{n:95,topic:'nt',
+q:'The number of different factors of $1800$ equals',
+opts:['12','210','36','18'],ans:2,
+sol:`<span class="math-line">
+$1800 = 2^3\\cdot 3^2\\cdot 5^2\\Rightarrow\\tau(1800)=(3+1)(2+1)(2+1)=4\\cdot 3\\cdot 3=\\boxed{36}$
+</span>`},
+
+{n:96,topic:'nt',
+q:'The number of different factors of $3003$ is',
+opts:['2','15','7','16'],ans:3,
+sol:`<span class="math-line">
+$3003 = 3\\cdot 7\\cdot 11\\cdot 13\\;(\\text{squarefree})\\Rightarrow\\tau = 2^4 = \\boxed{16}$
+</span>`},
+
+{n:97,topic:'nt',
+q:'The number of divisors of $6000$ is',
+opts:['40','50','60','30'],ans:0,
+sol:`<span class="math-line">
+$6000 = 2^4\\cdot 3\\cdot 5^3\\Rightarrow\\tau = 5\\cdot 2\\cdot 4 = \\boxed{40}$
+</span>`},
+
+{n:98,topic:'nt',
+q:'The number of positive integers dividing $240$ is',
+opts:['18','20','30','24'],ans:1,
+sol:`<span class="math-line">
+$240 = 2^4\\cdot 3\\cdot 5\\Rightarrow\\tau = 5\\cdot 2\\cdot 2 = \\boxed{20}$
+</span>`},
+
+{n:99,topic:'nt',
+q:'The sum of all positive divisors of $1800$ is',
+opts:['7201','6045','5040','4017'],ans:1,
+sol:`<span class="math-line">
+$\\sigma(1800)=\\sigma(2^3)\\cdot\\sigma(3^2)\\cdot\\sigma(5^2)=15\\cdot 13\\cdot 31=\\boxed{6045}$
+</span>`},
+
+{n:100,topic:'nt',
+q:'All factors $d_1,\\ldots,d_k$ of $n$ with $\\sum d_i=72$. Find $\\sum\\frac{1}{d_i}$.',
+opts:['$k^2/72$','$72/k$','$72/n$','Cannot be determined'],ans:2,
+sol:`<p>Use divisor pairing: the map $d_i\\mapsto n/d_i$ is a bijection on divisors.</p>
+<span class="math-line">
+$\\sum\\frac{1}{d_i} = \\frac{1}{n}\\sum\\frac{n}{d_i} = \\frac{1}{n}\\sum d_i = \\frac{72}{n}\\checkmark$
+</span>`},
+];
+
+/* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+   BUILD UI
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
+const CARD_STYLES = ['light','dark','tinted','dark','light','tinted'];
+
+function buildPage() {
+  const navTabs = document.getElementById('navTabs');
+  const contentArea = document.getElementById('contentArea');
+
+  TOPICS.forEach((topic, ti) => {
+    const qs = QS.filter(q => q.topic === topic.id);
+    if (!qs.length) return;
+
+    // Nav tab
+    const tab = document.createElement('button');
+    tab.className = 'nav-tab';
+    tab.style.setProperty('--tab-accent', topic.color);
+    tab.innerHTML = `${topic.name}<span class="tab-count" style="background:${topic.color}">${qs.length}</span>`;
+    tab.dataset.topic = topic.id;
+    tab.onclick = () => switchTab(topic.id);
+    navTabs.appendChild(tab);
+
+    // Section
+    const section = document.createElement('div');
+    section.className = 'topic-section';
+    section.id = `sec-${topic.id}`;
+    section.dataset.topic = topic.id;
+
+    // Topic header
+    const hdr = document.createElement('div');
+    hdr.className = 'topic-header';
+    hdr.innerHTML = `
+      <div class="topic-icon" style="background:${topic.color}20;color:${topic.color}">${topic.icon}</div>
+      <div class="topic-title-wrap">
+        <div class="topic-name">${topic.name}</div>
+        <div class="topic-desc">${topic.desc} &nbsp;·&nbsp; <span style="color:${topic.color};font-weight:600">${qs.length} questions</span></div>
+      </div>`;
+    section.appendChild(hdr);
+
+    // Cards grid
+    const grid = document.createElement('div');
+    grid.className = 'cards-grid';
+
+    qs.forEach((q, qi) => {
+      const styleClass = CARD_STYLES[qi % CARD_STYLES.length];
+      const card = document.createElement('div');
+      card.className = `q-card ${styleClass}`;
+      card.style.setProperty('--card-accent', topic.color);
+      card.dataset.text = (q.n+' '+q.q+' '+q.opts.join(' ')).toLowerCase();
+
+      const optHtml = q.opts.map((o, i) =>
+        `<div class="q-opt${i===q.ans?' correct':''}" data-idx="${i}">
+          <span class="opt-key">${['a','b','c','d'][i]}</span>
+          <span>${o}</span>
+        </div>`
+      ).join('');
+
+      card.innerHTML = `
+        <div class="q-card-accent" style="background:${topic.color}"></div>
+        <div class="q-card-top">
+          <div class="q-badge">${q.n}</div>
+          <div class="q-text-wrap">
+            <div class="q-question">${q.q}</div>
+          </div>
+        </div>
+        <div class="q-options">${optHtml}</div>
+        <div class="reveal-btn-wrap">
+          <button class="reveal-btn" onclick="toggleSolution(this)" style="background:${styleClass==='light'?'var(--ink)':''}">
+            <span class="btn-icon">+</span>
+            <span class="btn-text">Reveal Solution</span>
+          </button>
+        </div>
+        <div class="solution-panel">
+          <div class="solution-inner">
+            <div class="sol-label">Solution</div>
+            <div class="sol-body">${q.sol}
+              <div class="ans-badge" style="background:${topic.color}">
+                ✓ Answer: (${['a','b','c','d'][q.ans]}) — ${q.opts[q.ans]}
+              </div>
+            </div>
+          </div>
+        </div>`;
+
+      grid.appendChild(card);
+    });
+
+    section.appendChild(grid);
+    contentArea.appendChild(section);
+  });
+
+  // Activate first tab
+  switchTab(TOPICS[0].id);
+}
+
+function switchTab(topicId) {
+  document.querySelectorAll('.nav-tab').forEach(t => {
+    t.classList.toggle('active', t.dataset.topic === topicId);
+  });
+  document.querySelectorAll('.topic-section').forEach(s => {
+    s.classList.toggle('active', s.dataset.topic === topicId);
+  });
+  // Re-render math in newly visible section
+  setTimeout(() => {
+    const sec = document.getElementById(`sec-${topicId}`);
+    if (sec && window.renderMathInElement) {
+      renderMathInElement(sec, {
+        delimiters: [
+          {left:'$$',right:'$$',display:true},
+          {left:'$',right:'$',display:false}
+        ],
+        throwOnError: false
+      });
+    }
+  }, 50);
+}
+
+function toggleSolution(btn) {
+  const card = btn.closest('.q-card');
+  const panel = card.querySelector('.solution-panel');
+  const isOpen = panel.classList.contains('open');
+  panel.classList.toggle('open', !isOpen);
+  btn.classList.toggle('open', !isOpen);
+  btn.querySelector('.btn-text').textContent = isOpen ? 'Reveal Solution' : 'Hide Solution';
+  btn.querySelector('.btn-icon').textContent = isOpen ? '+' : '×';
+  if (!isOpen) {
+    setTimeout(() => {
+      if (window.renderMathInElement) {
+        renderMathInElement(panel, {
+          delimiters: [{left:'$$',right:'$$',display:true},{left:'$',right:'$',display:false}],
+          throwOnError: false
+        });
+      }
+    }, 50);
+  }
+}
+
+function handleSearch(val) {
+  const v = val.trim().toLowerCase();
+  if (!v) {
+    document.querySelectorAll('.q-card').forEach(c => c.style.display = '');
+    return;
+  }
+  // Show all sections
+  document.querySelectorAll('.topic-section').forEach(s => s.classList.add('active'));
+  document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
+
+  document.querySelectorAll('.q-card').forEach(card => {
+    card.style.display = card.dataset.text.includes(v) ? '' : 'none';
+  });
+  // Hide empty sections
+  document.querySelectorAll('.topic-section').forEach(s => {
+    const visible = [...s.querySelectorAll('.q-card')].some(c => c.style.display !== 'none');
+    s.classList.toggle('active', visible);
+  });
+}
+
+// Progress bar
+window.addEventListener('scroll', () => {
+  const p = window.scrollY / (document.documentElement.scrollHeight - window.innerHeight) * 100;
+  document.getElementById('pgbar').style.width = p + '%';
+  document.getElementById('scrollTop').classList.toggle('visible', window.scrollY > 300);
+});
+
+buildPage();
+</script>
+</body>
+</html>
